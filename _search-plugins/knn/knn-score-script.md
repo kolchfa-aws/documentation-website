@@ -5,6 +5,7 @@ nav_order: 3
 parent: k-NN
 has_children: false
 has_math: true
+canonical_url: https://opensearch.org/docs/latest/search-plugins/knn/knn-score-script/
 ---
 
 # Exact k-NN with scoring script
@@ -313,7 +314,7 @@ A space corresponds to the function used to measure the distance between two poi
   </tr>
   <tr>
     <td>innerproduct</td>
-    <td>\[ Distance(X, Y) = \sum_{i=1}^n (X_i - Y_i) \]</td>
+    <td>\[ Distance(X, Y) = \sum_{i=1}^n X_iY_i \]</td>
     <td>1 / (1 + Distance Function)</td>
   </tr>
   <tr>

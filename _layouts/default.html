@@ -52,7 +52,7 @@ layout: table_wrappers
     <div id="main-header"></div>
     <div class="side-bar">
       <div class="site-header">
-        <a href="#" id="menu-button" class="site-button">
+        <a href="https://opensearch.org/docs/latest/" id="menu-button" class="site-button">
           Documentation <svg viewBox="0 0 24 24" class="icon"><use xlink:href="#svg-grid"></use></svg>
         </a>
       </div>
@@ -104,7 +104,7 @@ layout: table_wrappers
     </div>
     <div class="copy-banner">
       <div class="container">
-        <h1><a href="#">Documentation</a></h1>
+        <h1><a href="https://opensearch.org/docs/latest/">Documentation</a></h1>
         {% if site.search_enabled != false or site.use_custom_search == true %}
         <div class="search">
           <div class="search-input-wrap">
@@ -142,6 +142,7 @@ layout: table_wrappers
           {% endif %}
         {% endunless %}
         <div id="main-content" class="main-content" role="main">
+          {% include warning.html %}
           {% if site.heading_anchors != false %}
             {% include vendor/anchor_headings.html html=content beforeHeading="true" anchorBody="<svg viewBox=\"0 0 16 16\" aria-hidden=\"true\"><use xlink:href=\"#svg-link\"></use></svg>" anchorClass="anchor-heading" anchorAttrs="aria-labelledby=\"%html_id%\"" %}
           {% else %}

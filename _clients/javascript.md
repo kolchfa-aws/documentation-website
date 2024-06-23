@@ -2,6 +2,8 @@
 layout: default
 title: JavaScript client
 nav_order: 90
+nav_exclude: true
+canonical_url: https://opensearch.org/docs/latest/clients/javascript/index/
 ---
 
 # JavaScript client
