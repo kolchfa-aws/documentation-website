@@ -4,7 +4,6 @@ title: Data Prepper
 parent: Trace analytics
 nav_order: 20
 canonical_url: https://opensearch.org/docs/latest/data-prepper/
-redirect_to: https://opensearch.org/docs/latest/data-prepper/
 nav_exclude: true
 ---
 

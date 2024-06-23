@@ -4,7 +4,6 @@ title: Configuration reference
 parent: Trace analytics
 nav_order: 25
 canonical_url: https://opensearch.org/docs/latest/data-prepper/managing-data-prepper/configuring-data-prepper/
-redirect_to: https://opensearch.org/docs/latest/data-prepper/managing-data-prepper/configuring-data-prepper/
 nav_exclude: true
 ---
 

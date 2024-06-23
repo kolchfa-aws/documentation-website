@@ -3,7 +3,6 @@ layout: default
 title: Python client
 nav_order: 70
 nav_exclude: true
-redirect_to: https://opensearch.org/docs/latest/clients/python-low-level/
 canonical_url: https://opensearch.org/docs/latest/clients/python-low-level/
 ---
 
