@@ -12,6 +12,7 @@ redirect_from:
   - /aggregations/index/
 ---
 
+ 
 # Aggregations
 
 OpenSearch isn’t just for search. Aggregations let you tap into OpenSearch's powerful analytics engine to analyze your data and extract statistics from it.
