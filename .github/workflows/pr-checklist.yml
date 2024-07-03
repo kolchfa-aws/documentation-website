@@ -15,21 +15,20 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            Thank you for submitting your PR. The PR states are Tech review -> Doc review -> Editorial review. Here's a checklist of the PR progression:
-            
+            Thank you for submitting your PR. The PR states are Tech review -> Doc review -> Editorial review. 
             ### PR checklist
             - [ ] Tech review: 
               - If you're a developer submitting documentation for a feature you implemented, you can skip this step.
               - If you need a tech review, tag @kolchfa-aws.
-              - Tech reviewer: Tag @kolchfa-aws once the tech review is done.
+            - [ ] Tech reviewer: Tag @kolchfa-aws once the tech review is done.
             - [ ] Doc review: A doc reviewer may:
-              - Leave comments/suggestions: You will implement comments and add suggestions to batch and commit the batch as one commit.
+              - Leave comments/suggestions: You will implement comments. Add suggestions to a batch and commit the batch as one commit.
               - Edit the PR: The doc reviewer will push edits to this PR directly (let us know if you don't want this option).
             - [ ] Editorial review: The doc reviewer will put the PR through editorial review.
 
             Please be available to answer questions. Thank you!
 
-      - name: Auto assign PR
+      - name: Assign PR to author
         uses: actions/github-script@v6
         with:
           script: |
