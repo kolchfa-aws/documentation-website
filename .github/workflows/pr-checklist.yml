@@ -20,8 +20,8 @@ jobs:
             ### PR checklist
             - [ ] Tech review: 
               - If you're a developer submitting documentation for a feature you implemented, you can skip this step.
-              - If you need a tech review, tag @kolchfa-aws.
-            - [ ] Once the PR is ready for doc review, tag the assignee of this PR or hdhalter.
+              - If you need help finding a tech reviewer, tag @kolchfa-aws.
+            - [ ] **Once the PR is ready for doc review, tag the assignee of this PR or @kolchfa-aws.**
             - [ ] Doc review: A doc reviewer may:
               - Leave comments/suggestions: You will implement comments and add suggestions to batch and commit the batch as one commit.
               - Edit the PR: The doc reviewer will push edits to this PR directly (let us know if you don't want this option).
