@@ -42,3 +42,4 @@ jobs:
               issue_number: pr_number,
               assignees: assignees
             });
+
