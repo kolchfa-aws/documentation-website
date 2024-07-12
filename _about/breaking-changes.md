@@ -5,6 +5,7 @@ nav_order: 5
 permalink: /breaking-changes/
 ---
 
+
 ## 1.x
 
 ### Migrating to OpenSearch and limits on the number of nested JSON objects
