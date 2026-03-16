@@ -8,11 +8,11 @@ jobs:
   delete-branch:
     runs-on: ubuntu-latest
     if: |
-      github.repository == 'opensearch-project/documentation-website' &&
-      ${{ !startsWith(github.event.pull_request.head.ref, 'main') }} &&
-      ${{ !startsWith(github.event.pull_request.head.ref, '1.') }} &&
-      ${{ !startsWith(github.event.pull_request.head.ref, '2.') }} &&
-      ${{ !startsWith(github.event.pull_request.head.ref, 'version/') }}
+      github.repository == 'kolchfa-aws/documentation-website' &&
+      !startsWith(github.event.pull_request.head.ref, 'main') &&
+      !startsWith(github.event.pull_request.head.ref, '1.') &&
+      !startsWith(github.event.pull_request.head.ref, '2.') &&
+      !startsWith(github.event.pull_request.head.ref, 'version/')
     steps:
       - name: Echo remove branch
         run: echo Removing ${{github.event.pull_request.head.ref}}
