@@ -87,6 +87,7 @@ getting_started:
 
 {%- comment -%}The `/docs/opensearch/` redirect is specifically to support the UI links in OpenSearch Dashboards 1.0.0.{%- endcomment -%}
 
+
 # ![OpenSearch icon]({{site.url}}{{site.baseurl}}/images/icons/OpenSearch-Core.png){: .heading-icon} OpenSearch and OpenSearch Dashboards
 **Version {{site.opensearch_major_minor_version}}**
 {: .label .label-blue }
