@@ -20,6 +20,6 @@ jobs:
       - name: Echo remove branch
         run: echo Removing ${{github.event.pull_request.head.ref}}
       - name: Delete merged branch
-        uses: SvanBoxel/delete-merged-branch@main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: dawidd6/action-delete-branch@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
