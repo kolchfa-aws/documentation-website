@@ -71,7 +71,7 @@ GET /_plugins/_security_analytics/alerts?detectorType=windows
 }
 ```
 
-#### Response fields
+#### Response body fields
 
 Alerts persist until you resolve the root cause and have the following states:
 
@@ -141,7 +141,7 @@ POST /_plugins/_security_analytics/detectors/<detector_id>/_acknowledge/alerts
 
 ## Get findings
 
-The Get findings API returns findings based on the detector attributes.
+The Get Findings API returns findings based on the detector attributes.
 
 ### Parameters
 

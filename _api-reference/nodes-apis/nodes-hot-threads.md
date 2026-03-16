@@ -5,20 +5,14 @@ parent: Nodes APIs
 nav_order: 30
 ---
 
-# Nodes hot threads
+# Nodes Hot Threads API
 **Introduced 1.0**
 {: .label .label-purple }
 
 The nodes hot threads endpoint provides information about busy JVM threads for selected cluster nodes. It provides a unique view of the of activity each node.
 
-#### Example
 
-```json
-GET /_nodes/hot_threads
-```
-{% include copy-curl.html %}
-
-## Path and HTTP methods
+## Endpoints
 
 ```json
 GET /_nodes/hot_threads
@@ -46,14 +40,31 @@ ignore_idle_threads | Boolean   | Don’t show threads that are in known idle st
 type | String | Supported thread types are `cpu`, `wait`, or `block`. Defaults to `cpu`.
 timeout | Time | Sets the time limit for node response. Default value is `30s`.
 
-#### Example request 
+## Example request 
 
-```json
+<!-- spec_insert_start
+component: example_code
+rest: GET /_nodes/hot_threads
+-->
+{% capture step1_rest %}
 GET /_nodes/hot_threads
-```
-{% include copy-curl.html %}
+{% endcapture %}
 
-#### Example response
+{% capture step1_python %}
+
+
+response = client.nodes.info(
+  node_id_or_metric = "hot_threads"
+)
+
+{% endcapture %}
+
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->
+
+## Example response
 
 ```bash
 ::: {opensearch}{F-ByTQzVQ3GQeYzQJArJGQ}{GxbcLdCATPWggOuQHJAoCw}{127.0.0.1}{127.0.0.1:9300}{dimr}{shard_indexing_pressure_enabled=true}
@@ -65,7 +76,7 @@ GET /_nodes/hot_threads
        org.opensearch.performanceanalyzer.collectors.ScheduledMetricCollectorsExecutor.run(ScheduledMetricCollectorsExecutor.java:100)
 ```
 
-## Response
+## Example response
 
 Unlike the majority of OpenSearch API responses, this response is in a text format.
 

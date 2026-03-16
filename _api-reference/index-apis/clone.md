@@ -1,39 +1,22 @@
 ---
 layout: default
 title: Clone index
-parent: Index APIs
-nav_order: 15
+parent: Index operations
+grand_parent: Index APIs
+nav_order: 20
 redirect_from:
   - /opensearch/rest-api/index-apis/clone/
 ---
 
-# Clone index
+# Clone Index API
 **Introduced 1.0**
 {: .label .label-purple }
 
 The clone index API operation clones all data in an existing read-only index into a new index. The new index cannot already exist.
 
-## Example
+## Endpoints
 
 ```json
-PUT /sample-index1/_clone/cloned-index1
-{
-  "settings": {
-    "index": {
-      "number_of_shards": 2,
-      "number_of_replicas": 1
-    }
-  },
-  "aliases": {
-    "sample-alias1": {}
-  }
-}
-```
-{% include copy-curl.html %}
-
-## Path and HTTP methods
-
-```
 POST /<source-index>/_clone/<target-index>
 PUT /<source-index>/_clone/<target-index>
 ```
@@ -48,14 +31,19 @@ OpenSearch indexes have the following naming restrictions:
 
   `:`, `"`, `*`, `+`, `/`, `\`, `|`, `?`, `#`, `>`, or `<`
 
-## URL parameters
-
-Your request must include the source and target indexes. All other clone index parameters are optional.
+## Path parameter
 
 Parameter | Type | Description
 :--- | :--- | :---
 &lt;source-index&gt; | String | The source index to clone.
 &lt;target-index&gt; | String | The index to create and add cloned data to.
+
+## Query parameters
+
+Your request must include the source and target indexes. All other clone index parameters are optional.
+
+Parameter | Type | Description
+:--- | :--- | :---
 wait_for_active_shards | String | The number of active shards that must be available before OpenSearch processes the request. Default is 1 (only the primary shard). Set to all or a positive integer. Values greater than 1 require replicas. For example, if you specify a value of 3, the index must have two replicas distributed across two additional nodes for the operation to succeed.
 cluster_manager_timeout | Time | How long to wait for a connection to the cluster manager node. Default is `30s`.
 timeout | Time | How long to wait for the request to return. Default is `30s`.
@@ -66,7 +54,66 @@ task_execution_timeout | Time | The explicit task execution timeout. Only useful
 
 The clone index API operation creates a new target index, so you can specify any [index settings]({{site.url}}{{site.baseurl}}/im-plugin/index-settings/) and [aliases]({{site.url}}{{site.baseurl}}/opensearch/index-alias/) to apply to the target index.
 
-## Response
+## Example request
+
+<!-- spec_insert_start
+component: example_code
+rest: PUT /sample-index1/_clone/cloned-index1
+body: |
+{
+  "settings": {
+    "index": {
+      "number_of_shards": 2,
+      "number_of_replicas": 1
+    }
+  },
+  "aliases": {
+    "sample-alias1": {}
+  }
+}
+-->
+{% capture step1_rest %}
+PUT /sample-index1/_clone/cloned-index1
+{
+  "settings": {
+    "index": {
+      "number_of_shards": 2,
+      "number_of_replicas": 1
+    }
+  },
+  "aliases": {
+    "sample-alias1": {}
+  }
+}
+{% endcapture %}
+
+{% capture step1_python %}
+
+
+response = client.indices.clone(
+  index = "sample-index1",
+  target = "cloned-index1",
+  body =   {
+    "settings": {
+      "index": {
+        "number_of_shards": 2,
+        "number_of_replicas": 1
+      }
+    },
+    "aliases": {
+      "sample-alias1": {}
+    }
+  }
+)
+
+{% endcapture %}
+
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->
+
+## Example response
 
 ```json
 {

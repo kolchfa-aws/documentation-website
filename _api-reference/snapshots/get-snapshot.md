@@ -1,15 +1,21 @@
 ---
 layout: default
-title: Get Snapshot
+title: Get snapshot
 parent: Snapshot APIs
 nav_order: 6
 ---
 
-# Get snapshot.
+# Get Snapshot API
 **Introduced 1.0**
 {: .label .label-purple }
 
 Retrieves information about a snapshot.
+
+## Endpoints
+
+```json
+GET _snapshot/<repository>/<snapshot>/
+```
 
 ## Path parameters
 
@@ -22,19 +28,37 @@ Retrieves information about a snapshot.
 
 | Parameter | Data type | Description | 
 :--- | :--- | :---
-| verbose | Boolean | Whether to show all, or just basic snapshot information. If `true`, returns all information. If `false`, omits information like start/end times, failures, and shards. Optional, defaults to `true`.|
-| ignore_unavailable | Boolean | How to handle snapshots that are unavailable (corrupted or otherwise temporarily can't be returned). If `true` and the snapshot is unavailable, the request does not return the snapshot. If `false` and the snapshot is unavailable, the request returns an error. Optional, defaults to `false`.|
+| verbose | Boolean | When `true`, returns additional information about each snapshot, such as the version of OpenSearch that took the snapshot, the start and end times of the snapshot, and the number of shards contained in the snapshot. When `false`, returns only snapshot names and contained indexes. This is useful when the snapshots belong to a cloud-based repository, where each blob read is a cost or performance concern. Optional. Default is `true`.|
+| ignore_unavailable | Boolean | How to handle snapshots that are unavailable (corrupted or otherwise temporarily can't be returned). If `true` and the snapshot is unavailable, the request does not return the snapshot. If `false` and the snapshot is unavailable, the request returns an error. Optional. Default is `false`.|
 
-#### Example request
+## Example request
 
 The following request retrieves information for the `my-first-snapshot` located in the `my-opensearch-repo` repository:
 
-````json
-GET _snapshot/my-opensearch-repo/my-first-snapshot
-````
-{% include copy-curl.html %}
+<!-- spec_insert_start
+component: example_code
+rest: GET /_snapshot/my-opensearch-repo/my-first-snapshot
+-->
+{% capture step1_rest %}
+GET /_snapshot/my-opensearch-repo/my-first-snapshot
+{% endcapture %}
 
-#### Example response
+{% capture step1_python %}
+
+
+response = client.snapshot.get(
+  repository = "my-opensearch-repo",
+  snapshot = "my-first-snapshot"
+)
+
+{% endcapture %}
+
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->
+
+## Example response
 
 Upon success, the response returns snapshot information:
 
@@ -73,7 +97,7 @@ Upon success, the response returns snapshot information:
   ]
 }
 ````
-## Response fields
+## Response body fields
 
 | Field | Data type | Description |
 | :--- | :--- | :--- | 

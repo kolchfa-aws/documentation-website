@@ -4,9 +4,10 @@ title: Remote-backed storage
 nav_order: 40
 has_children: true
 parent: Availability and recovery
-redirect_from: 
+redirect_from:
   - /opensearch/remote/
   - /tuning-your-cluster/availability-and-recovery/remote/
+  - /tuning-your-cluster/availability-and-recovery/remote-store/
 ---
 
 # Remote-backed storage
@@ -36,6 +37,7 @@ To enable remote-backed storage for a given cluster, provide the remote store re
 # Repository name
 node.attr.remote_store.segment.repository: my-repo-1
 node.attr.remote_store.translog.repository: my-repo-2
+node.attr.remote_store.state.repository: my-repo-3
 
 # Segment repository settings
 node.attr.remote_store.repository.my-repo-1.type: s3
@@ -49,6 +51,12 @@ node.attr.remote_store.repository.my-repo-2.settings.bucket: <Bucket Name 2>
 node.attr.remote_store.repository.my-repo-2.settings.base_path: <Bucket Base Path 2>
 node.attr.remote_store.repository.my-repo-2.settings.region: us-east-1
 
+# Remote cluster state repository settings
+node.attr.remote_store.repository.my-repo-3.type: s3
+node.attr.remote_store.repository.my-repo-3.settings.bucket: <Bucket Name 3>
+node.attr.remote_store.repository.my-repo-3.settings.base_path: <Bucket Base Path 3>
+node.attr.remote_store.repository.my-repo-3.settings.region: us-east-1
+
 ```
 {% include copy-curl.html %}
 
@@ -60,7 +68,7 @@ During the bootstrapping process, the remote-backed repositories listed in `open
 
 ## Related cluster settings
 
-You can use the following [cluster settings]({{site.url}}{{site.baseurl}}//api-reference/cluster-api/cluster-settings/) to tune how remote-backed clusters handle each workload.
+You can use the following [cluster settings]({{site.url}}{{site.baseurl}}/api-reference/cluster-api/cluster-settings/) to tune how remote-backed clusters handle each workload.
 
 | Field | Data type | Description |
 | :--- | :--- | :--- |
@@ -105,7 +113,7 @@ You can use remote-backed storage to:
 
 ## Benchmarks
 
-The OpenSearch Project has run remote store using multiple workload options available within the [OpenSearch Benchmark](https://opensearch.org/docs/latest/benchmark/index/) tool. This section summarizes the benchmark results for the following workloads: 
+The OpenSearch Project has run remote store using multiple workload options available within the [OpenSearch Benchmark]({{site.url}}{{site.baseurl}}/benchmark/index/) tool. This section summarizes the benchmark results for the following workloads: 
 
 - [StackOverflow](https://github.com/opensearch-project/opensearch-benchmark-workloads/tree/main/so)
 - [HTTP logs](https://github.com/opensearch-project/opensearch-benchmark-workloads/tree/main/http_logs)

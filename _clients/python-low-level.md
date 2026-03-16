@@ -106,7 +106,7 @@ client = OpenSearch(
 
 ## Connecting to Amazon OpenSearch Service
 
-The following example illustrates connecting to Amazon OpenSearch Service:
+The following example illustrates connecting to Amazon OpenSearch Service using IAM credentials:
 
 ```python
 from opensearchpy import OpenSearch, RequestsHttpConnection, AWSV4SignerAuth
@@ -127,6 +127,25 @@ client = OpenSearch(
     pool_maxsize = 20
 )
 ```
+
+To connect to Amazon OpenSearch Service through HTTP with a username and password, use the following code:
+
+```python
+from opensearchpy import OpenSearch
+
+auth = ('admin', 'admin') # For testing only. Don't store credentials in code.
+
+client = OpenSearch(
+    hosts=[{"host": host, "port": 443}],
+    http_auth=auth,
+    http_compress=True,  # enables gzip compression for request bodies
+    use_ssl=True,
+    verify_certs=True,
+    ssl_assert_hostname=False,
+    ssl_show_warn=False,
+)
+```
+
 {% include copy.html %}
 
 ## Connecting to Amazon OpenSearch Serverless
@@ -169,7 +188,7 @@ index_body = {
   }
 }
 
-response = client.indices.create(index_name, body=index_body)
+response = client.indices.create(index=index_name, body=index_body)
 ```
 {% include copy.html %}
 
@@ -200,7 +219,7 @@ You can perform several operations at the same time by using the `bulk()` method
 ```python
 movies = '{ "index" : { "_index" : "my-dsl-index", "_id" : "2" } } \n { "title" : "Interstellar", "director" : "Christopher Nolan", "year" : "2014"} \n { "create" : { "_index" : "my-dsl-index", "_id" : "3" } } \n { "title" : "Star Trek Beyond", "director" : "Justin Lin", "year" : "2015"} \n { "update" : {"_id" : "3", "_index" : "my-dsl-index" } } \n { "doc" : {"year" : "2016"} }'
 
-client.bulk(movies)
+client.bulk(body=movies)
 ```
 {% include copy.html %}
 
@@ -290,7 +309,7 @@ index_body = {
   }
 }
 
-response = client.indices.create(index_name, body=index_body)
+response = client.indices.create(index=index_name, body=index_body)
 print('\nCreating index:')
 print(response)
 
@@ -316,7 +335,7 @@ print(response)
 
 movies = '{ "index" : { "_index" : "my-dsl-index", "_id" : "2" } } \n { "title" : "Interstellar", "director" : "Christopher Nolan", "year" : "2014"} \n { "create" : { "_index" : "my-dsl-index", "_id" : "3" } } \n { "title" : "Star Trek Beyond", "director" : "Justin Lin", "year" : "2015"} \n { "update" : {"_id" : "3", "_index" : "my-dsl-index" } } \n { "doc" : {"year" : "2016"} }'
 
-client.bulk(movies)
+client.bulk(body=movies)
 
 # Search for the document.
 q = 'miller'

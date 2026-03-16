@@ -1,11 +1,12 @@
 ---
 layout: default
 title: Flush
-parent: Index APIs
-nav_order: 36
+parent: Index operations
+grand_parent: Index APIs
+nav_order: 30
 ---
 
-# Flush
+# Flush API
 
 **Introduced 1.0**
 {: .label .label-purple }
@@ -14,11 +15,11 @@ The Flush API stores all in-memory operations to segments on disk. Operations fl
 
 OpenSearch automatically performs flushes in the background based on conditions like transaction log size, which is controlled by the `index.translog.flush_threshold_size` setting. Use the Flush API sparingly, for example, for manual restarts or to free up memory.
 
-## Path and HTTP methods
+## Endpoints
 
 The Flush API supports the following paths:
 
-```
+```json
 GET /_flush
 POST /_flush
 GET /{index}/_flush
@@ -35,7 +36,7 @@ The following table lists the available path parameters. All path parameters are
 
 ## Query parameters
 
-The Flush API supports the following query parameters.
+All parameters are optional.
 
 | Parameter | Data type | Description |
 | :--- | :--- | :--- |
@@ -45,21 +46,60 @@ The Flush API supports the following query parameters.
 | `ignore_unavailable` | Boolean | When `true`, OpenSearch ignores missing or closed indexes. If `false`, OpenSearch returns an error if the force merge operation encounters missing or closed indexes. Default is `false`. |
 | `wait_if_ongoing` | Boolean | When `true`, the Flush API does not run while another flush request is active. When `false`, OpenSearch returns an error if another flush request is active. Default is `true`. |
 
-## Example request: Flush a specific index
+## Example requests
+
+### Flush a specific index
 
 The following example flushes an index named `shakespeare`:
 
-```
+<!-- spec_insert_start
+component: example_code
+rest: POST /shakespeare/_flush
+body: 
+-->
+{% capture step1_rest %}
 POST /shakespeare/_flush
-```
 
-## Example request: Flush all indexes
+{% endcapture %}
+
+{% capture step1_python %}
+
+
+response = client.indices.flush(
+  index = "shakespeare"
+)
+
+{% endcapture %}
+
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->
+
+
+### Flush all indexes
 
 The following example flushes all indexes in a cluster:
 
-```
+<!-- spec_insert_start
+component: example_code
+rest: POST /_flush
+body: 
+-->
+{% capture step1_rest %}
 POST /_flush
-```
+
+{% endcapture %}
+
+{% capture step1_python %}
+
+response = client.indices.flush()
+{% endcapture %}
+
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->
 
 ## Example response
 

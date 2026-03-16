@@ -2,7 +2,7 @@
 
 Welcome to the content style guide for the OpenSearch Project. This guide covers the style standards to be observed when creating OpenSearch content and will evolve as we implement best practices and lessons learned in order to best serve the community.
 
-In addition to this guide and [TERMS.md](https://github.com/opensearch-project/documentation-website/blob/main/TERMS.md), our content is generally edited in accordance with the [Microsoft Writing Style Guide](https://docs.microsoft.com/en-us/style-guide/welcome/), [The Chicago Manual of Style](https://www.chicagomanualofstyle.org/home.html), and [Merriam-Webster](https://www.merriam-webster.com/) (listed in order of precedence); however, we may deviate from these style guides in order to maintain consistency and accommodate the unique needs of the community. This is by no means an exhaustive list of style standards, and we value transparency, so we welcome contributions to our style standards and guidelines. If you have a question regarding our standards or adherence/non-adherence to the style guides or would like to make a contribution, please tag @natebower on GitHub.
+In addition to this guide and [TERMS.md](https://github.com/opensearch-project/documentation-website/blob/main/TERMS.md), our content generally follows the [Microsoft Writing Style Guide](https://docs.microsoft.com/en-us/style-guide/welcome/), [The Chicago Manual of Style](https://www.chicagomanualofstyle.org/home.html), and [Merriam-Webster](https://www.merriam-webster.com/) (listed in order of precedence); however, we may deviate from these style guides in order to maintain consistency and accommodate the unique needs of the community. This is by no means an exhaustive list of style standards, and we value transparency, so we welcome contributions to our style standards and guidelines.
 
 ## Naming conventions, voice, tone, and brand personality traits
 
@@ -23,11 +23,11 @@ The following naming conventions should be observed in OpenSearch Project conten
 
 #### Product names
 
-Capitalize product names. The OpenSearch Project has three products: OpenSearch, OpenSearch Dashboards, and Data Prepper. For example:
+Capitalize product names. The OpenSearch Project has three products: OpenSearch, OpenSearch Dashboards, and OpenSearch Data Prepper. For example:
 
 * "To install *OpenSearch*, download the Docker image."
 * "To access *OpenSearch Dashboards*, open your browser and navigate to http://localhost:5601/app/home."
-* "*Data Prepper* contains the following components:"
+* "*OpenSearch Data Prepper* contains the following components:"
 
 Capitalize the names of clients and tools. For example:
 
@@ -51,7 +51,7 @@ Use lowercase when referring to features, unless you are referring to a formally
 
 A plugin is a feature or distinct component that extends the functionality of OpenSearch. For now, capitalize plugin names, but use *plugin* sparingly. The concept of plugins will become obsolete once we re-architect the product. For example:
 
-* "Interaction with the *ML Commons* plugin occurs through either the REST API or [ad](https://opensearch.org/docs/latest/search-plugins/sql/ppl/functions#ad) and [kmeans](https://opensearch.org/docs/latest/search-plugins/sql/ppl/functions#kmeans) Piped Processing Language (PPL) commands."
+* "Interaction with the *ML Commons* plugin occurs through either the REST API or [ad](https://docs.opensearch.org/latest/search-plugins/sql/ppl/functions#ad) and [kmeans](https://docs.opensearch.org/latest/search-plugins/sql/ppl/functions#kmeans) Piped Processing Language (PPL) commands."
 * "Use the *Neural Search* plugin to integrate ML language models into your search workloads."
 
 ### Voice and tone
@@ -128,6 +128,7 @@ The following table lists acronyms that you don't need to spell out.
 | CSV | comma-separated values |
 | DNS | Domain Name System |
 | DOS | disk operating system |
+| Faiss | Facebook AI Similarity Search |
 | FAQ | frequently asked questions |
 | FTP | File Transfer Protocol |
 | GIF | Graphics Interchange Format |
@@ -141,8 +142,10 @@ The following table lists acronyms that you don't need to spell out.
 | JPEG | Joint Photographic Experts Group |
 | JSON | JavaScript Object Notation |
 | k-NN | k-nearest neighbors |
+| MS MARCO | Microsoft Machine Reading Comprehension |
 | NAT | network address translation |
 | NGINX | engine x |
+| NMSLIB | Non-Metric Space Library |
 | PDF | Portable Document Format |
 | RAM | random access memory |
 | REST | Representational State Transfer |
@@ -260,7 +263,7 @@ When introducing a code or command line example that refers to a variable or pla
           - Where space is limited (for example, in a table), you can use "*See* [link text]."
      - Ensure that the link text matches the section title text. <br> <br> Example: "To get involved, see [Contributing](https://opensearch.org/source.html) on the OpenSearch website." <br>
 
-- **Embedded links**: Embedded links are woven into a sentence without formal introductory text. They're especially useful in tables or other elements where space is tight. The text around the embedded link must relate to the information in the link so that the reader understands the context. Do not use *here* or *click here* for link text because it creates accessibility problems. <br> <br> Example: "Finally, [delete the index](https://opensearch.org/docs/latest/api-reference/index-apis/delete-index)."
+- **Embedded links**: Embedded links are woven into a sentence without formal introductory text. They're especially useful in tables or other elements where space is tight. The text around the embedded link must relate to the information in the link so that the reader understands the context. Do not use *here* or *click here* for link text because it creates accessibility problems. <br> <br> Example: "Finally, [delete the index](https://docs.opensearch.org/latest/api-reference/index-apis/delete-index)."
 
 ### Lists
 

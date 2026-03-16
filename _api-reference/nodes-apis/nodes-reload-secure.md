@@ -5,15 +5,15 @@ parent: Nodes APIs
 nav_order: 50
 ---
 
-# Nodes reload secure settings
+# Nodes Reload Secure Settings API
 **Introduced 1.0**
 {: .label .label-purple }
 
 The nodes reload secure settings endpoint allows you to change secure settings on a node and reload the secure settings without restarting the node.
 
-## Path and HTTP methods
+## Endpoints
 
-```
+```json
 POST _nodes/reload_secure_settings
 POST _nodes/<nodeId>/reload_secure_settings
 ```
@@ -26,7 +26,7 @@ Parameter | Type | Description
 :--- | :--- | :---
 nodeId | String | A comma-separated list of nodeIds used to filter results. Supports [node filters]({{site.url}}{{site.baseurl}}/api-reference/nodes-apis/index/#node-filters). Defaults to `_all`.
 
-## Request fields
+## Request body fields
 
 The request may include an optional object containing the password for the OpenSearch keystore.
 
@@ -36,16 +36,33 @@ The request may include an optional object containing the password for the OpenS
 }
 ```
 
-#### Example request
+## Example request
 
 The following is an example API request:
 
-```
-POST _nodes/reload_secure_settings
-```
-{% include copy-curl.html %}
+<!-- spec_insert_start
+component: example_code
+rest: POST /_nodes/reload_secure_settings
+-->
+{% capture step1_rest %}
+POST /_nodes/reload_secure_settings
+{% endcapture %}
 
-#### Example response
+{% capture step1_python %}
+
+
+response = client.nodes.reload_secure_settings(
+  body = { "Insert body here" }
+)
+
+{% endcapture %}
+
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->
+
+## Example response
 
 The following is an example response:
 

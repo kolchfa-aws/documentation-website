@@ -1,12 +1,12 @@
 ---
 layout: default
-title: Common REST Parameters
+title: Common REST parameters
 nav_order: 93
 redirect_from:
   - /opensearch/common-parameters/
 ---
 
-# Common REST parameters
+# Common REST parameters 
 **Introduced 1.0**
 {: .label .label-purple }
 
@@ -124,3 +124,32 @@ Meters | `m` or `meters`
 Centimeters | `cm` or `centimeters`
 Millimeters | `mm` or `millimeters`
 Nautical miles | `NM`, `nmi`, or `nauticalmiles` 
+
+## `X-Opaque-Id` header
+
+You can specify an opaque identifier for any request using the `X-Opaque-Id` header. This identifier is used to track tasks and deduplicate deprecation warnings in server-side logs. This identifier is used to differentiate between callers sending requests to your OpenSearch cluster. Do not specify a unique value per request.
+
+#### Example request
+
+The following request adds an opaque ID to the request:
+
+```bash
+curl -H "X-Opaque-Id: my-curl-client-1" -XGET localhost:9200/_tasks
+```
+{% include copy.html %}
+
+## `X-Request-Id` header
+
+You can specify a unique identifier for a search request using the `X-Request-Id` header. This identifier is used to track individual search requests and can be referenced in logs, such as slow logs, for troubleshooting and analysis. The value must be a 32-character hexadecimal string. 
+
+#### Example request
+
+The following request adds a request ID to a search request:
+
+```bash
+curl -X GET "http://localhost:9200/_search" \
+  -H "Content-Type: application/json" \
+  -H "X-Request-Id: 19d538d7c42d09240be001d1e4ff6201" \
+  -d '{"query": {"match_all": {}}}'
+```
+{% include copy.html %}

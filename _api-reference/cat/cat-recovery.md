@@ -1,61 +1,131 @@
 ---
 layout: default
 title: CAT recovery
-parent: CAT API
-
+parent: CAT APIs
 nav_order: 50
 has_children: false
 redirect_from:
 - /opensearch/rest-api/cat/cat-recovery/
 ---
 
-# CAT recovery
+# CAT Recovery API
 **Introduced 1.0**
 {: .label .label-purple }
 
 The CAT recovery operation lists all completed and ongoing index and shard recoveries.
 
-## Example
 
+<!-- spec_insert_start
+api: cat.recovery
+component: endpoints
+-->
+## Endpoints
+```json
+GET /_cat/recovery
+GET /_cat/recovery/{index}
 ```
-GET _cat/recovery?v
-```
-{% include copy-curl.html %}
+<!-- spec_insert_end -->
+
+
+<!-- spec_insert_start
+api: cat.recovery
+component: query_parameters
+columns: Parameter, Data type, Description, Default
+include_deprecated: false
+-->
+## Query parameters
+
+The following table lists the available query parameters. All query parameters are optional.
+
+| Parameter | Data type | Description | Default |
+| :--- | :--- | :--- | :--- |
+| `active_only` | Boolean | If `true`, the response only includes ongoing shard recoveries. | `false` |
+| `bytes` | String | The units used to display byte values. <br> Valid values are: `b`, `kb`, `k`, `mb`, `m`, `gb`, `g`, `tb`, `t`, `pb`, and `p`. | N/A |
+| `detailed` | Boolean | When `true`, includes detailed information about shard recoveries. | `false` |
+| `format` | String | A short version of the `Accept` header, such as `json` or `yaml`. | N/A |
+| `h` | List | A comma-separated list of column names to display. | N/A |
+| `help` | Boolean | Returns help information. | `false` |
+| `index` | List | A comma-separated list of data streams, indexes, and aliases used to limit the request. Supports wildcards (`*`). To target all data streams and indexes, omit this parameter or use `*` or `_all`. | N/A |
+| `s` | List | A comma-separated list of column names or column aliases to sort by. | N/A |
+| `time` | String | Specifies the time units, for example, `5d` or `7h`. For more information, see [Supported units]({{site.url}}{{site.baseurl}}/api-reference/units/). <br> Valid values are: `nanos`, `micros`, `ms`, `s`, `m`, `h`, and `d`. | N/A |
+| `v` | Boolean | Enables verbose mode, which displays column headers. | `false` |
+
+<!-- spec_insert_end -->
+
+## Example requests
+
+<!-- spec_insert_start
+component: example_code
+rest: GET /_cat/recovery?v
+-->
+{% capture step1_rest %}
+GET /_cat/recovery?v
+{% endcapture %}
+
+{% capture step1_python %}
+
+
+response = client.cat.recovery(
+  params = { "v": "true" }
+)
+
+{% endcapture %}
+
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->
 
 To see only the recoveries of a specific index, add the index name after your query.
 
-```
-GET _cat/recovery/<index>?v
-```
-{% include copy-curl.html %}
+<!-- spec_insert_start
+component: example_code
+rest: GET /_cat/recovery/<index>?v
+-->
+{% capture step1_rest %}
+GET /_cat/recovery/<index>?v
+{% endcapture %}
+
+{% capture step1_python %}
+
+
+response = client.cat.recovery(
+  index = "<index>",
+  params = { "v": "true" }
+)
+
+{% endcapture %}
+
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->
 
 If you want to get information for more than one index, separate the indexes with commas:
 
-```json
-GET _cat/recovery/index1,index2,index3
-```
-{% include copy-curl.html %}
+<!-- spec_insert_start
+component: example_code
+rest: GET /_cat/recovery/index1,index2,index3
+-->
+{% capture step1_rest %}
+GET /_cat/recovery/index1,index2,index3
+{% endcapture %}
 
-## Path and HTTP methods
+{% capture step1_python %}
 
-```
-GET _cat/recovery
-```
 
-## URL parameters
+response = client.cat.recovery(
+  index = "index1,index2,index3"
+)
 
-All CAT recovery URL parameters are optional.
+{% endcapture %}
 
-In addition to the [common URL parameters]({{site.url}}{{site.baseurl}}/api-reference/cat/index), you can specify the following parameters:
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->
 
-Parameter | Type | Description
-:--- | :--- | :---
-active_only | Boolean | Whether to only include ongoing shard recoveries. Default is false.
-bytes | Byte size | Specify the units for byte size. For example, `7kb` or `6gb`. For more information, see [Supported units]({{site.url}}{{site.baseurl}}/opensearch/units/).
-detailed | Boolean | Whether to include detailed information about shard recoveries. Default is false.
-time | Time | Specify the units for time. For example, `5d` or `7h`. For more information, see [Supported units]({{site.url}}{{site.baseurl}}/opensearch/units/).
-
-## Response
+## Example response
 
 ```json
 index | shard | time | type | stage | source_host | source_node | target_host | target_node | repository | snapshot | files | files_recovered | files_percent | files_total | bytes | bytes_recovered | bytes_percent | bytes_total | translog_ops | translog_ops_recovered | translog_ops_percent

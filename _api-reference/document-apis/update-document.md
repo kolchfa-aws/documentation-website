@@ -7,53 +7,42 @@ redirect_from:
  - /opensearch/rest-api/document-apis/update-document/
 ---
 
-# Update document
+# Update Document API
 **Introduced 1.0**
 {: .label .label-purple }
 
-If you need to update a document's fields in your index, you can use the update document API operation. You can do so by specifying the new data you want to be in your index or by including a script in your request body, which OpenSearch runs to update the document. By default, the update operation only updates a document that exists in the index. If a document does not exist, the API returns an error. To _upsert_ a document (update the document that exists or index a new one), use the [upsert](#upsert) operation.
+If you need to update a document's fields in your index, you can use the update document API operation. You can do so by specifying the new data you want to be in your index or by including a script in your request body, which OpenSearch runs to update the document. By default, the update operation only updates a document that exists in the index. If a document does not exist, the API returns an error. To _upsert_ a document (update the document that exists or index a new one), use the [upsert](#using-the-upsert-operation) operation.
 
-## Example
+
+You cannot explicitly specify an ingest pipeline when calling the Update Document API. If a `default_pipeline` or `final_pipeline` is defined in your index, the following behavior applies:
+
+- **Upsert operations**: When indexing a new document, the `default_pipeline` and `final_pipeline` defined in the index are executed as specified.  
+- **Update operations**: When updating an existing document, ingest pipeline execution is not recommended because it may produce erroneous results. Support for running ingest pipelines during update operations is deprecated and will be removed in version 3.0.0. If your index has a defined ingest pipeline, the update document operation will return the following deprecation warning: 
+```
+the index [sample-index1] has a default ingest pipeline or a final ingest pipeline, the support of the ingest pipelines for update operation causes unexpected result and will be removed in 3.0.0
+```
+
+## Endpoints
 
 ```json
-POST /sample-index1/_update/1
-{
-  "doc": {
-    "first_name" : "Bruce",
-    "last_name" : "Wayne"
-  }
-}
-```
-{% include copy-curl.html %}
-
-## Script example
-
-```json
-POST /test-index1/_update/1
-{
-  "script" : {
-    "source": "ctx._source.secret_identity = \"Batman\""
-  }
-}
-```
-{% include copy-curl.html %}
-
-## Path and HTTP methods
-
-```
 POST /<index>/_update/<_id>
 ```
 
-## URL parameters
+## Path parameters
 
 Parameter | Type | Description | Required
 :--- | :--- | :--- | :---
 &lt;index&gt; | String | Name of the index. | Yes
 &lt;_id&gt; | String | The ID of the document to update. | Yes
+
+## Query parameters
+
+Parameter | Type | Description | Required
+:--- | :--- | :--- | :---
 if_seq_no | Integer | Only perform the update operation if the document has the specified sequence number. | No
 if_primary_term | Integer | Perform the update operation if the document has the specified primary term. | No
 lang | String | Language of the script. Default is `painless`. | No
-require_alias | Boolean | Specifies whether the destination must be an index alias. Default is false. | No
+require_alias | Boolean | Specifies whether the destination must be an index alias. Default is `false`. | No
 refresh | Enum | If true, OpenSearch refreshes shards to make the operation visible to searching. Valid options are `true`, `false`, and `wait_for`, which tells OpenSearch to wait for a refresh before executing the operation. Default is `false`. | No
 retry_on_conflict | Integer | The amount of times OpenSearch should retry the operation if there's a document conflict. Default is 0. | No
 routing | String | Value to route the update operation to a specific shard. | No
@@ -63,7 +52,7 @@ _source_includes | List | A comma-separated list of source fields to include in 
 timeout | Time | How long to wait for a response from the cluster. | No
 wait_for_active_shards | String | The number of active shards that must be available before OpenSearch processes the update request. Default is 1 (only the primary shard). Set to `all` or a positive integer. Values greater than 1 require replicas. For example, if you specify a value of 3, the index must have two replicas distributed across two additional nodes for the operation to succeed. | No
 
-## Request body
+## Request body fields
 
 Your request body must contain the information with which you want to update your document. If you only want to replace certain fields in your document, your request body must include a `doc` object containing the fields that you want to update:
 
@@ -90,13 +79,175 @@ You can also use a script to tell OpenSearch how to update your document:
 }
 ```
 
-## Upsert
+## Example requests
+<!-- spec_insert_start
+component: example_code
+rest: POST /sample-index1/_update/2
+body: |
+{
+  "scripted_upsert": true,
+  "script": {
+    "source": "ctx._source.first_name = params.first_name; ctx._source.last_name = params.last_name; ctx._source.age = params.age;",
+    "params": {
+      "first_name": "Selina",
+      "last_name": "Kyle",
+      "age": 28
+    }
+  },
+  "upsert": {}
+}
+-->
+{% capture step1_rest %}
+POST /sample-index1/_update/2
+{
+  "scripted_upsert": true,
+  "script": {
+    "source": "ctx._source.first_name = params.first_name; ctx._source.last_name = params.last_name; ctx._source.age = params.age;",
+    "params": {
+      "first_name": "Selina",
+      "last_name": "Kyle",
+      "age": 28
+    }
+  },
+  "upsert": {}
+}
+{% endcapture %}
 
-Upsert is an operation that conditionally either updates an existing document or inserts a new one based on information in the object. 
+{% capture step1_python %}
+
+
+response = client.update(
+  id = "2",
+  index = "sample-index1",
+  body =   {
+    "scripted_upsert": true,
+    "script": {
+      "source": "ctx._source.first_name = params.first_name; ctx._source.last_name = params.last_name; ctx._source.age = params.age;",
+      "params": {
+        "first_name": "Selina",
+        "last_name": "Kyle",
+        "age": 28
+      }
+    },
+    "upsert": {}
+  }
+)
+
+{% endcapture %}
+
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->
+
+### Update a document
+
+<!-- spec_insert_start
+component: example_code
+rest: POST /sample-index1/_update/1
+body: |
+{
+  "doc": {
+    "first_name" : "Bruce",
+    "last_name" : "Wayne"
+  }
+}
+-->
+{% capture step1_rest %}
+POST /sample-index1/_update/1
+{
+  "doc": {
+    "first_name": "Bruce",
+    "last_name": "Wayne"
+  }
+}
+{% endcapture %}
+
+{% capture step1_python %}
+
+
+response = client.update(
+  id = "1",
+  index = "sample-index1",
+  body =   {
+    "doc": {
+      "first_name": "Bruce",
+      "last_name": "Wayne"
+    }
+  }
+)
+
+{% endcapture %}
+
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->
+
+### Update a document with a script 
+
+<!-- spec_insert_start
+component: example_code
+rest: POST /test-index1/_update/1
+body: |
+{
+  "script" : {
+    "source": "ctx._source.secret_identity = \"Batman\""
+  }
+}
+-->
+{% capture step1_rest %}
+POST /test-index1/_update/1
+{
+  "script": {
+    "source": "ctx._source.secret_identity = \"Batman\""
+  }
+}
+{% endcapture %}
+
+{% capture step1_python %}
+
+
+response = client.update(
+  id = "1",
+  index = "test-index1",
+  body =   {
+    "script": {
+      "source": "ctx._source.secret_identity = \"Batman\""
+    }
+  }
+)
+
+{% endcapture %}
+
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->
+
+
+### Using the upsert operation
+
+Upsert is an operation that conditionally either updates an existing document or inserts a new one based on information in the request. This is useful when you're not sure if a document already exists and want to ensure the correct content is present either way.
 
 In the following example, the `upsert` operation updates the `first_name` and `last_name` fields if a document already exists. If a document does not exist, a new one is indexed using content in the `upsert` object.
 
-```json
+<!-- spec_insert_start
+component: example_code
+rest: POST /sample-index1/_update/1
+body: |
+{
+  "doc": {
+    "first_name": "Martha",
+    "last_name": "Rivera"
+  },
+  "upsert": {
+    "last_name": "Oliveira",
+    "age": "31"
+  }
+}
+-->
+{% capture step1_rest %}
 POST /sample-index1/_update/1
 {
   "doc": {
@@ -108,7 +259,32 @@ POST /sample-index1/_update/1
     "age": "31"
   }
 }
-```
+{% endcapture %}
+
+{% capture step1_python %}
+
+
+response = client.update(
+  id = "1",
+  index = "sample-index1",
+  body =   {
+    "doc": {
+      "first_name": "Martha",
+      "last_name": "Rivera"
+    },
+    "upsert": {
+      "last_name": "Oliveira",
+      "age": "31"
+    }
+  }
+)
+
+{% endcapture %}
+
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->
 
 Consider an index that contains the following document:
 
@@ -123,6 +299,7 @@ Consider an index that contains the following document:
   }
 }
 ```
+{% include copy-curl.html %}
 
 After the upsert operation, the document's `first_name` and `last_name` fields are updated:
 
@@ -137,6 +314,7 @@ After the upsert operation, the document's `first_name` and `last_name` fields a
   }
 }
 ```
+{% include copy-curl.html %}
 
 If the document does not exist in the index, a new document is indexed with the fields specified in the `upsert` object:
 
@@ -151,10 +329,24 @@ If the document does not exist in the index, a new document is indexed with the 
   }
 }
 ```
+{% include copy-curl.html %}
 
 You can also add `doc_as_upsert` to the request and set it to `true` to use the information in the `doc` field for performing the upsert operation:
 
-```json
+<!-- spec_insert_start
+component: example_code
+rest: POST /sample-index1/_update/1
+body: |
+{
+  "doc": {
+    "first_name": "Martha",
+    "last_name": "Oliveira",
+    "age": "31"
+  },
+  "doc_as_upsert": true
+}
+-->
+{% capture step1_rest %}
 POST /sample-index1/_update/1
 {
   "doc": {
@@ -164,7 +356,30 @@ POST /sample-index1/_update/1
   },
   "doc_as_upsert": true
 }
-```
+{% endcapture %}
+
+{% capture step1_python %}
+
+
+response = client.update(
+  id = "1",
+  index = "sample-index1",
+  body =   {
+    "doc": {
+      "first_name": "Martha",
+      "last_name": "Oliveira",
+      "age": "31"
+    },
+    "doc_as_upsert": true
+  }
+)
+
+{% endcapture %}
+
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->
 
 Consider an index that contains the following document:
 
@@ -179,8 +394,9 @@ Consider an index that contains the following document:
   }
 }
 ```
+{% include copy-curl.html %}
 
-After the upsert operation, the document's `first_name` and `last_name` fields are updated and an `age` field is added. If the document does not exist in the index, a new document is indexed with the fields specified in the `upsert` object. In both cases, the document is as follows:
+After the upsert operation, the document's `first_name` and `last_name` fields are updated and an `age` field is added. If the document does not exist in the index, a new document is created using the fields from the `doc` object:
 
 ```json
 {
@@ -194,8 +410,93 @@ After the upsert operation, the document's `first_name` and `last_name` fields a
   }
 }
 ```
+{% include copy-curl.html %}
 
-## Response
+You can also use a script to control how the document is updated. By setting the `scripted_upsert` parameter to `true`, you instruct OpenSearch to use the script even when the document doesn't exist yet. This allows you to define the entire upsert logic in the script.
+
+In the following example, the script sets the document to contain specific fields regardless of whether it previously existed:
+
+<!-- spec_insert_start
+component: example_code
+rest: POST /sample-index1/_update/2
+body: |
+{
+  "scripted_upsert": true,
+  "script": {
+    "source": "ctx._source.first_name = params.first_name; ctx._source.last_name = params.last_name; ctx._source.age = params.age;",
+    "params": {
+      "first_name": "Selina",
+      "last_name": "Kyle",
+      "age": 28
+    }
+  },
+  "upsert": {}
+}
+-->
+{% capture step1_rest %}
+POST /sample-index1/_update/2
+{
+  "scripted_upsert": true,
+  "script": {
+    "source": "ctx._source.first_name = params.first_name; ctx._source.last_name = params.last_name; ctx._source.age = params.age;",
+    "params": {
+      "first_name": "Selina",
+      "last_name": "Kyle",
+      "age": 28
+    }
+  },
+  "upsert": {}
+}
+{% endcapture %}
+
+{% capture step1_python %}
+
+
+response = client.update(
+  id = "2",
+  index = "sample-index1",
+  body =   {
+    "scripted_upsert": true,
+    "script": {
+      "source": "ctx._source.first_name = params.first_name; ctx._source.last_name = params.last_name; ctx._source.age = params.age;",
+      "params": {
+        "first_name": "Selina",
+        "last_name": "Kyle",
+        "age": 28
+      }
+    },
+    "upsert": {}
+  }
+)
+
+{% endcapture %}
+
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->
+
+If the document with ID `2` does not already exist, this operation creates it using the script. If the document does exist, the script updates the specified fields. In both cases, the result is:
+
+```json
+{
+  "_index": "sample-index1",
+  "_id": "2",
+  "_score": 1,
+  "_source": {
+    "first_name": "Selina",
+    "last_name": "Kyle",
+    "age": 28
+  }
+}
+```
+{% include copy-curl.html %}
+
+Using `scripted_upsert` gives you full control over document creation and updates when standard `doc`-based operations are not flexible enough.
+
+
+## Example response
+
 ```json
 {
   "_index": "sample-index1",
@@ -226,3 +527,104 @@ successful | The number of shards OpenSearch successfully updated the document i
 failed | The number of shards OpenSearch failed to update the document in.
 _seq_no | The sequence number assigned when the document was indexed.
 _primary_term | The primary term assigned when the document was indexed.
+
+## Error responses
+
+The following examples show common error responses you may encounter when using the Update Document API.
+
+### Document not found
+
+If you try to update a document that doesn't exist in the index without using the upsert operation, OpenSearch returns a 404 error:
+
+```json
+{
+  "error": {
+    "root_cause": [
+      {
+        "type": "document_missing_exception",
+        "reason": "[1]: document missing",
+        "index": "sample-index1",
+        "shard": "0",
+        "index_uuid": "aAsFqTI0Tc2W0LCWgPNrOA"
+      }
+    ],
+    "type": "document_missing_exception",
+    "reason": "[1]: document missing",
+    "index": "sample-index1",
+    "shard": "0",
+    "index_uuid": "aAsFqTI0Tc2W0LCWgPNrOA"
+  },
+  "status": 404
+}
+```
+
+To avoid this error, use the [upsert operation](#using-the-upsert-operation) to create the document if it doesn't exist.
+
+### Version conflict
+
+If you're using optimistic concurrency control with `if_seq_no` and `if_primary_term` parameters and the document has been modified since you last read it, OpenSearch returns a 409 conflict error:
+
+```json
+{
+  "error": {
+    "root_cause": [
+      {
+        "type": "version_conflict_engine_exception",
+        "reason": "[1]: version conflict, required seqNo [3], primary term [1]. current document has seqNo [4] and primary term [1]",
+        "index": "sample-index1",
+        "shard": "0",
+        "index_uuid": "aAsFqTI0Tc2W0LCWgPNrOA"
+      }
+    ],
+    "type": "version_conflict_engine_exception",
+    "reason": "[1]: version conflict, required seqNo [3], primary term [1]. current document has seqNo [4] and primary term [1]",
+    "index": "sample-index1",
+    "shard": "0",
+    "index_uuid": "aAsFqTI0Tc2W0LCWgPNrOA"
+  },
+  "status": 409
+}
+```
+
+To handle this error, retrieve the latest version of the document and retry the update with the correct `if_seq_no` and `if_primary_term` values, or use the `retry_on_conflict` parameter to automatically retry the operation.
+
+### Script compilation error
+
+If there's an error in your Painless script, OpenSearch returns a 400 error with details about the compilation failure:
+
+```json
+{
+  "error": {
+    "root_cause": [
+      {
+        "type": "illegal_argument_exception",
+        "reason": "failed to execute script"
+      }
+    ],
+    "type": "illegal_argument_exception",
+    "reason": "failed to execute script",
+    "caused_by": {
+      "type": "script_exception",
+      "reason": "compile error",
+      "script_stack": [
+        "ctx._source.value = params.newValue",
+        "                         ^---- HERE"
+      ],
+      "script": "ctx._source.value = params.newValue",
+      "lang": "painless",
+      "position": {
+        "offset": 25,
+        "start": 0,
+        "end": 34
+      },
+      "caused_by": {
+        "type": "illegal_argument_exception",
+        "reason": "cannot resolve symbol [params.newValue]"
+      }
+    }
+  },
+  "status": 400
+}
+```
+
+Review the `script_stack` and `caused_by` fields in the error response to identify and fix the script error.

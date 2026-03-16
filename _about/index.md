@@ -10,11 +10,84 @@ redirect_from:
   - /docs/opensearch/
   - /opensearch/
   - /opensearch/index/
+why_use:
+  - heading: "Vector database"
+    description: "Use OpenSearch as a vector database to combine the power of traditional search, analytics, and vector search"
+    link: "/vector-search/"
+    image: "/images/icons/vector-search-square.png"
+    image_alt: "Vector search icon"
+  - heading: "Fast, scalable full-text search"
+    description: "Help users find the right information in your application, website, or data lake catalog"
+    link: "/search-plugins/"
+    image: "/images/icons/Icon_Lexical_Search-150x150.avif"
+    image_alt: "Lexical search icon"
+  - heading: "Application and infrastructure monitoring"
+    description: "Use observability logs, metrics, and traces to monitor your applications in real time"
+    link: "/observing-your-data/"
+    image: "/images/icons/Icon_Observability-150x150.avif"
+    image_alt: "Observability monitoring icon"
+  - heading: "Security and event information management"
+    description: "Centralize logs to enable real-time security monitoring and forensic analysis"
+    link: "/security/"
+    image: "/images/icons/Icon_Security_Analytics-150x150.avif"
+    image_alt: "Security analytics icon"
+features:
+  - heading: "Vector search"
+    description: "Build AI/ML-powered vector search applications"
+    link: "/vector-search/"
+    image: "/images/icons/Vector-search-icon.avif"
+    image_alt: "Vector search icon"
+  - heading: "Machine learning"
+    description: "Integrate machine learning models into your workloads"
+    link: "/ml-commons-plugin/"
+    image: "/images/icons/OpenSearch-AI-1.png"
+    image_alt: "Machine learning icon"
+  - heading: "Customizing your search"
+    description: "From optimizing performance to improving relevance, customize your search experience"
+    link: "/search-plugins/"
+    image: "/images/icons/OpenSearch-Search.png"
+    image_alt: "Search customization icon"
+  - heading: "Workflow automation"
+    description: "Automate complex OpenSearch setup and preprocessing tasks"
+    link: "/automating-configurations/"
+    image: "/images/icons/Workflow-Icon.avif"
+    image_alt: "Workflow automation icon"
+  - heading: "Anomaly detection"
+    description: "Identify atypical data and receive automatic notifications"
+    link: "/monitoring-plugins/ad/"
+    image: "/images/icons/OpenSearch-Observability.png"
+    image_alt: "Observability and anomaly detection icon"
+  - heading: "Building visualizations"
+    description: "Visualize your data in OpenSearch Dashboards"
+    link: "/dashboards/"
+    image: "/images/icons/OpenSearch-Dashboards-Square.png"
+    image_alt: "OpenSearch Dashboards icon"
+getting_started:
+  - heading: "Get started with OpenSearch"
+    description: "Learn about OpenSearch and start ingesting and searching data"
+    link: "/getting-started/"
+    image: "/images/icons/OpenSearch-Core.png"
+    image_alt: "OpenSearch Core icon"
+  - heading: "Get started with OpenSearch Dashboards"
+    description: "Learn about OpenSearch Dashboards applications and tools used to visualize data"
+    link: "/dashboards/quickstart/"
+    image: "/images/icons/OpenSearch-Dashboards.png"
+    image_alt: "OpenSearch Dashboards icon"
+  - heading: "Get started with vector search"
+    description: "Learn about vector search options and build your first vector search application"
+    link: "/vector-search/getting-started/"
+    image: "/images/icons/Vector-search-icon.avif"
+    image_alt: "Vector search icon"
+  - heading: "Get started with OpenSearch security"
+    description: "Learn about security in OpenSearch"
+    link: "/security/getting-started/"
+    image: "/images/icons/OpenSearch-Security.png"
+    image_alt: "OpenSearch Security icon"
 ---
 
 {%- comment -%}The `/docs/opensearch/` redirect is specifically to support the UI links in OpenSearch Dashboards 1.0.0.{%- endcomment -%}
 
-# OpenSearch and OpenSearch Dashboards
+# ![OpenSearch icon]({{site.url}}{{site.baseurl}}/images/icons/OpenSearch-Core.png){: .heading-icon} OpenSearch and OpenSearch Dashboards
 **Version {{site.opensearch_major_minor_version}}**
 {: .label .label-blue }
 
@@ -22,63 +95,21 @@ This section contains documentation for OpenSearch and OpenSearch Dashboards.
 
 ## Getting started
 
-- [Intro to OpenSearch]({{site.url}}{{site.baseurl}}/intro/)
-- [Quickstart]({{site.url}}{{site.baseurl}}/quickstart/)
-- [Install OpenSearch]({{site.url}}{{site.baseurl}}/install-and-configure/install-opensearch/index/)
-- [Install OpenSearch Dashboards]({{site.url}}{{site.baseurl}}/install-and-configure/install-dashboards/index/)
-- [See the FAQ](https://opensearch.org/faq)
+{% include cards.html cards=page.getting_started %}
 
 ## Why use OpenSearch?
 
-With OpenSearch, you can perform the following use cases:
+{% include cards.html cards=page.why_use documentation_link=true %}
 
-<table style="table-layout: auto ; width: 100%;">
-<tbody>
-<tr style="text-align: center; vertical-align:center;">
-<td><img src="{{site.url}}{{site.baseurl}}/images/1_search.png" class="no-border" alt="Fast, scalable full-text search" height="100"/></td>
-<td><img src="{{site.url}}{{site.baseurl}}/images/2_monitoring.png" class="no-border" alt="Application and infrastructure monitoring" height="100"/></td>
-<td><img src="{{site.url}}{{site.baseurl}}/images/3_security.png" class="no-border" alt="Security and event information management" height="100"/></td>
-<td><img src="{{site.url}}{{site.baseurl}}/images/4_tracking.png" class="no-border" alt="Operational health tracking" height="100"/></td>
-</tr>
-<tr style="text-align: left; vertical-align:top; font-weight: bold; color: rgb(0,59,92)">
-<td>Fast, Scalable Full-text Search</td>
-<td>Application and Infrastructure Monitoring</td>
-<td>Security and Event Information Management</td>
-<td>Operational Health Tracking</td>
-</tr>
-<tr style="text-align: left; vertical-align:top;">
-<td>Help users find the right information within your application, website, or data lake catalog. </td>
-<td>Easily store and analyze log data, and set automated alerts for underperformance.</td>
-<td>Centralize logs to enable real-time security monitoring and forensic analysis.</td>
-<td>Use observability logs, metrics, and traces to monitor your applications and business in real time.</td>
-</tr>
-</tbody>
-</table>
+## Key features
 
-**Additional features and plugins:**
+{% include cards.html cards=page.features%}
 
-OpenSearch has several features and plugins to help index, secure, monitor, and analyze your data. Most OpenSearch plugins have corresponding OpenSearch Dashboards plugins that provide a convenient, unified user interface.
-- [Anomaly detection]({{site.url}}{{site.baseurl}}/monitoring-plugins/ad/) - Identify atypical data and receive automatic notifications
-- [KNN]({{site.url}}{{site.baseurl}}/search-plugins/knn/) - Find “nearest neighbors” in your vector data
-- [Performance Analyzer]({{site.url}}{{site.baseurl}}/monitoring-plugins/pa/) - Monitor and optimize your cluster
-- [SQL]({{site.url}}{{site.baseurl}}/search-plugins/sql/index/) - Use SQL or a piped processing language to query your data
-- [Index State Management]({{site.url}}{{site.baseurl}}/im-plugin/) - Automate index operations
-- [ML Commons plugin]({{site.url}}{{site.baseurl}}/ml-commons-plugin/index/) - Train and execute machine-learning models
-- [Asynchronous search]({{site.url}}{{site.baseurl}}/search-plugins/async/) - Run search requests in the background
-- [Cross-cluster replication]({{site.url}}{{site.baseurl}}/replication-plugin/index/) - Replicate your data across multiple OpenSearch clusters
-
-
-## The secure path forward
-OpenSearch includes a demo configuration so that you can get up and running quickly, but before using OpenSearch in a production environment, you must [configure the Security plugin manually]({{site.url}}{{site.baseurl}}/security/configuration/index/) with your own certificates, authentication method, users, and passwords.
-
-## Looking for the Javadoc?
-
-See [opensearch.org/javadocs/](https://opensearch.org/javadocs/).
 
 ## Get involved
 
-[OpenSearch](https://opensearch.org) is supported by Amazon Web Services. All components are available under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.html) on [GitHub](https://github.com/opensearch-project/).
-The project welcomes GitHub issues, bug fixes, features, plugins, documentation---anything at all. To get involved, see [Contributing](https://opensearch.org/source.html) on the OpenSearch website.
+[OpenSearch](https://opensearch.org) is supported by the OpenSearch Software Foundation. All components are available under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.html) on [GitHub](https://github.com/opensearch-project/).
+The project welcomes GitHub issues, bug fixes, features, plugins, documentation---anything at all. To get involved, see [Contributing](https://github.com/opensearch-project/.github/blob/main/CONTRIBUTING.md).
 
 ---
 

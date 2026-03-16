@@ -61,12 +61,25 @@ module Jekyll::LinkChecker
   @ignored_domains = [
     'localhost',
     'playground.opensearch.org', # inifite redirect, https://github.com/opensearch-project/dashboards-anywhere/issues/172
+    'ml.playground.opensearch.org', # infinite redirect
     'crates.io', # 404s on bots
     'www.cloudflare.com', # 403s on bots
     'platform.openai.com', # 403s on bots
     'openai.com', # 403s on bots
     'mvnrepository.com', # 403s on bots
     'www.intel.com', # 403s on bots
+    'wordnet.princeton.edu', # 403s on bots
+    'docs.search-guard.com', # 403s on bots
+    'www.deepseek.com', # 403s on bots
+    'dl.acm.org', # 403s on bots
+    'www.npmjs.com', # 403s on bots
+    'www.base64decode.org', # 403s on bots
+    'docs.docker.com', # 403s on bots,
+    'docs-vizlib.insightsoftware.com', # 403s on bots,
+    'medium.com', # 403s on bots
+    'www.iso.org', # 403s on bots
+    'elastic.co', # 406s on bots
+    'www.elastic.co', # 406s on bots
     'example.issue.link' # a fake example link from the template
   ]
 
@@ -198,7 +211,7 @@ module Jekyll::LinkChecker
   def self.verify(_site)
     return unless check_links?
 
-    @base_url_matcher = %r{^#{@site.config["url"]}#{@site.baseurl}(/.*)$}.freeze
+    @base_url_matcher = %r{^#{@site.config['url']}#{@site.baseurl}(/.*)$}.freeze
 
     @urls.sort_by { |_url, _pages| rand }.each do |url, pages|
       location = "./#{pages.to_a.join(', ./')}"

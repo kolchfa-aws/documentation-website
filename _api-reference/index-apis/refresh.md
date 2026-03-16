@@ -1,12 +1,13 @@
 ---
 layout: default
 title: Refresh index
-parent: Index APIs
-nav_order: 61
+parent: Index operations
+grand_parent: Index APIs
+nav_order: 60
 ---
 
-# Refresh index 
-Introduced 1.0
+# Refresh Index API
+**Introduced 1.0**
 {: .label .label-purple }
 
 The Refresh Index API refreshes one or more indexes in an OpenSearch cluster. In the case of data streams, the Refresh Index API refreshes a stream's backing indexes. 
@@ -20,7 +21,12 @@ After a shard becomes idle, the indexes will not refresh until either the next s
 
 To use the Refresh Index API, you must have write access to the indexes you want to refresh.
 
-## Path and HTTP methods
+## Refresh request behavior
+
+The Refresh Index API call is synchronous. The response is returned only after all targeted shards have been refreshed.
+Because refresh operations are resource intensive, we recommend relying on automatic periodic refreshes using `index.refresh_interval`.
+
+## Endpoints
 
 ```json
 POST /_refresh
@@ -48,22 +54,41 @@ The following table lists the available query parameters. All query parameters a
 | `expand_wildcards` | String | The type of index that the wildcard patterns can match. If the request targets data streams, this argument determines whether the wildcard expressions match any hidden data streams. Supports comma-separated values, such as `open,hidden`. Valid values are `all`, `open`, `closed`, `hidden`, and `none`.
 
 
+## Example requests
 
-#### Example: Refresh several data streams or indexes
+### Refresh several data streams or indexes
 
 The following example request refreshes two indexes named `my-index-A` and `my-index-B`:
 
 
-```
+<!-- spec_insert_start
+component: example_code
+rest: POST /my-index-A,my-index-B/_refresh
+-->
+{% capture step1_rest %}
 POST /my-index-A,my-index-B/_refresh
-```
-{% include copy-curl.html %}
+{% endcapture %}
 
-#### Example: Refresh all data streams and indexes in a cluster
+{% capture step1_python %}
+
+
+response = client.indices.refresh(
+  index = "my-index-A,my-index-B"
+)
+
+{% endcapture %}
+
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->
+
+### Refresh all data streams and indexes in a cluster
 
 The following request refreshes all data streams and indexes in a cluster:
 
-```
+```json
 POST /_refresh
 ```
+{% include copy-curl.html %}
 

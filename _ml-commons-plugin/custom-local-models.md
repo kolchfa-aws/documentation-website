@@ -3,7 +3,7 @@ layout: default
 title: Custom models
 parent: Using ML models within OpenSearch
 grand_parent: Integrating ML models
-nav_order: 120
+nav_order: 20
 ---
 
 # Custom local models
@@ -65,14 +65,10 @@ To ensure that this basic local setup works, specify the following cluster setti
 PUT _cluster/settings
 {
   "persistent": {
-    "plugins": {
-      "ml_commons": {
-        "allow_registering_model_via_url": "true",
-        "only_run_on_ml_node": "false",
-        "model_access_control_enabled": "true",
-        "native_memory_threshold": "99"
-      }
-    }
+    "plugins.ml_commons.allow_registering_model_via_url": "true",
+    "plugins.ml_commons.only_run_on_ml_node": "false",
+    "plugins.ml_commons.model_access_control_enabled": "true",
+    "plugins.ml_commons.native_memory_threshold": "99"
   }
 }
 ```
@@ -218,7 +214,7 @@ The response contains the task ID that you can use to check the status of the de
 }
 ```
 
-As in the previous step, check the status of the operation by calling the Tasks API:
+As in the previous step, check the status of the operation by calling the [Get ML Task API]({{site.url}}{{site.baseurl}}/ml-commons-plugin/api/tasks-apis/get-task/):
 
 ```bash
 GET /_plugins/_ml/tasks/vVePb4kBJ1eYAeTM7ljG
@@ -324,7 +320,7 @@ The response contains the tokens and weights:
 
 ## Step 5: Use the model for search
 
-To learn how to use the model for vector search, see [Using an ML model for neural search]({{site.url}}{{site.baseurl}}/search-plugins/neural-search/#using-an-ml-model-for-neural-search).
+To learn how to use the model for vector search, see [AI search methods]({{site.url}}{{site.baseurl}}/vector-search/ai-search/#ai-search-methods).
 
 ## Question answering models
 

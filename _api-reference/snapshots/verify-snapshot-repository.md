@@ -1,21 +1,26 @@
 ---
 layout: default
-title: Verify Snaphot Repository
+title: Verify snaphot repository
 parent: Snapshot APIs
-
 nav_order: 4
 ---
 
-# Verify snapshot repository
+# Verify Snapshot Repository API
 **Introduced 1.0**
 {: .label .label-purple }
 
 Verifies that a snapshot repository is functional. Verifies the repository on each node in a cluster.
 
-If verification is successful, the verify snapshot repository API returns a list of nodes connected to the snapshot repository. If verification failed, the API returns an error.
+If verification is successful, the Verify Snapshot Repository API returns a list of nodes connected to the snapshot repository. If verification fails, the API returns an error.
 
 If you use the Security plugin, you must have the `manage cluster` privilege.
 {: .note}
+
+## Endpoints
+
+```json
+GET _snapshot/<repository>/
+```
 
 ## Path parameters
 
@@ -29,18 +34,37 @@ Path parameters are optional.
 
 | Parameter | Data type | Description | 
 :--- | :--- | :---
-| cluster_manager_timeout | Time | Amount of time to wait for a connection to the master node. Optional, defaults to `30s`. |
+| cluster_manager_timeout | Time | Amount of time to wait for a connection to the cluster manager node. Optional, defaults to `30s`. |
 | timeout | Time | The period of time to wait for a response. If a response is not received before the timeout value, the request fails and returns an error. Defaults to `30s`. |
 
-#### Example request
+## Example request
 
 The following request verifies that the my-opensearch-repo is functional:
 
-````json
+<!-- spec_insert_start
+component: example_code
+rest: POST /_snapshot/my-opensearch-repo/_verify?timeout=0s&cluster_manager_timeout=50s
+-->
+{% capture step1_rest %}
 POST /_snapshot/my-opensearch-repo/_verify?timeout=0s&cluster_manager_timeout=50s
-````
+{% endcapture %}
 
-#### Example response
+{% capture step1_python %}
+
+
+response = client.snapshot.verify_repository(
+  repository = "my-opensearch-repo",
+  params = { "timeout": "0s", "cluster_manager_timeout": "50s" }
+)
+
+{% endcapture %}
+
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->
+
+## Example response
 
 The example that follows corresponds to the request above in the [Example request](#example-request) section.
 
@@ -70,7 +94,7 @@ In the preceding sample, one node is connected to the snapshot repository. If mo
 }
 ````
 
-## Response fields
+## Response body fields
 
 | Field | Data type | Description | 
 :--- | :--- | :---

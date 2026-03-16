@@ -2,21 +2,26 @@
 layout: default
 title: Document-level security
 parent: Access control
-nav_order: 85
+nav_order: 90
 redirect_from:
 - /security/access-control/document-level-security/
 - /security-plugin/access-control/document-level-security/
 ---
 
 # Document-level security
-Document-level security lets you restrict a role to a subset of documents in an index. The easiest way to get started with document- and field-level security is to open OpenSearch Dashboards and choose **Security**. Then choose **Roles**, create a new role, and review the **Index Permissions** section, shown in the following image.
+
+Document-level security (DLS) determines the documents that a role can retrieve during read operations, such as search and get. It does not restrict write operations. If a role has permissions to index, update, or delete documents in an index, it can still modify or remove documents that are hidden by DLS. Write behavior is determined solely by index permissions and action groups.
+
+To get started with DLS, open OpenSearch Dashboards and choose **Security**. Then select **Roles**, create a new role, and review the **Index permissions** section shown in the following image.
 
 ![Document- and field-level security screen in OpenSearch Dashboards]({{site.url}}{{site.baseurl}}/images/security-dls.png)
 
+The maximum size for the document-level security configuration is 1024 KB (1,048,404 characters). 
+{: .warning}
 
 ## Simple roles
 
-Document-level security uses OpenSearch query domain-specific language (DSL) to define which documents a role grants access to. In OpenSearch Dashboards, choose an index pattern and provide a query in the **Document-level security** section:
+DLS uses OpenSearch query domain-specific language (DSL) to define the documents that a role is allowed to retrieve. In OpenSearch Dashboards, choose an index pattern and provide a query in the **Document-level security** section:
 
 ```json
 {
@@ -190,6 +195,10 @@ Adaptive | `adaptive-level` | The default setting that allows OpenSearch to auto
 ## DLS and multiple roles
 
 OpenSearch combines all DLS queries with the logical `OR` operator. However, when a role that uses DLS is combined with another security role that doesn't use DLS, the query results are filtered to display only documents matching the DLS from the first role. This filter rule also applies to roles that do not grant read documents.
+
+### DLS and write permissions
+
+Make sure that a user that has DLS-configured roles does not have write permissions. If write permissions are added, the user will be able to index documents which they will not be able to retrieve due to DLS filtering.
 
 ### When to enable `plugins.security.dfm_empty_overrides_all`
 

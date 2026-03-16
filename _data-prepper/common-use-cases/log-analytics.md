@@ -7,7 +7,7 @@ nav_order: 30
 
 # Log analytics
 
-Data Prepper is an extendable, configurable, and scalable solution for log ingestion into OpenSearch and Amazon OpenSearch Service. Data Prepper supports receiving logs from [Fluent Bit](https://fluentbit.io/) through the [HTTP Source](https://github.com/opensearch-project/data-prepper/blob/main/data-prepper-plugins/http-source/README.md) and processing those logs with a [Grok Processor](https://github.com/opensearch-project/data-prepper/blob/main/data-prepper-plugins/grok-processor/README.md) before ingesting them into OpenSearch through the [OpenSearch sink](https://github.com/opensearch-project/data-prepper/blob/main/data-prepper-plugins/opensearch/README.md).
+OpenSearch Data Prepper is an extendable, configurable, and scalable solution for log ingestion into OpenSearch and Amazon OpenSearch Service. Data Prepper supports receiving logs from [Fluent Bit](https://fluentbit.io/) through the [HTTP Source](https://github.com/opensearch-project/data-prepper/blob/main/data-prepper-plugins/http-source/README.md) and processing those logs with a [Grok Processor](https://github.com/opensearch-project/data-prepper/blob/main/data-prepper-plugins/grok-processor/README.md) before ingesting them into OpenSearch through the [OpenSearch sink](https://github.com/opensearch-project/data-prepper/blob/main/data-prepper-plugins/opensearch/README.md).
 
 The following image shows all of the components used for log analytics with Fluent Bit, Data Prepper, and OpenSearch.
 
@@ -67,7 +67,7 @@ log-pipeline:
         # Change to your credentials
         username: "admin"
         password: "admin"
-        # Add a certificate file if you are accessing an OpenSearch cluster with a self-signed certificate  
+        # Add a certificate file if you are accessing an OpenSearch cluster with a self-signed certificate
         #cert: /path/to/cert
         # If you are connecting to an Amazon OpenSearch Service domain without
         # Fine-Grained Access Control, enable these settings. Comment out the
@@ -78,6 +78,7 @@ log-pipeline:
         # You should change this to correspond with how your OpenSearch indexes are set up.
         index: apache_logs
 ```
+{% include copy.html %}
 
 This pipeline configuration is an example of Apache log ingestion. Don't forget that you can easily configure the Grok Processor for your own custom logs. You will need to modify the configuration for your OpenSearch cluster.
 
@@ -100,7 +101,7 @@ Note that you should adjust the file `path`, output `Host`, and `Port` according
 
 The following is an example `fluent-bit.conf` file without SSL and basic authentication enabled on the HTTP source:
 
-```
+```text
 [INPUT]
   name                  tail
   refresh_interval      5
@@ -115,6 +116,7 @@ The following is an example `fluent-bit.conf` file without SSL and basic authent
   URI /log/ingest
   Format json
 ```
+{% include copy.html %}
 
 If your HTTP source has SSL and basic authentication enabled, you will need to add the details of `http_User`, `http_Passwd`, `tls.crt_file`, and `tls.key_file` to the `fluent-bit.conf` file, as shown in the following example.
 
@@ -122,7 +124,7 @@ If your HTTP source has SSL and basic authentication enabled, you will need to a
 
 The following is an example `fluent-bit.conf` file with SSL and basic authentication enabled on the HTTP source:
 
-```
+```text
 [INPUT]
   name                  tail
   refresh_interval      5
@@ -142,11 +144,12 @@ The following is an example `fluent-bit.conf` file with SSL and basic authentica
   URI /log/ingest
   Format json
 ```
+{% include copy.html %}
 
 # Next steps
 
 See the [Data Prepper Log Ingestion Demo Guide](https://github.com/opensearch-project/data-prepper/blob/main/examples/log-ingestion/README.md) for a specific example of Apache log ingestion from `FluentBit -> Data Prepper -> OpenSearch` running through Docker.
 
-In the future, Data Prepper will offer additional sources and processors that will make more complex log analytics pipelines available. Check out the [Data Prepper Project Roadmap](https://github.com/opensearch-project/data-prepper/projects/1) to see what is coming.  
+In the future, Data Prepper will offer additional sources and processors that will make more complex log analytics pipelines available. Check out the [Data Prepper Project Roadmap](https://github.com/orgs/opensearch-project/projects/221) to see what is coming.
 
 If there is a specific source, processor, or sink that you would like to include in your log analytics workflow and is not currently on the roadmap, please bring it to our attention by creating a GitHub issue. Additionally, if you are interested in contributing to Data Prepper, see our [Contributing Guidelines](https://github.com/opensearch-project/data-prepper/blob/main/CONTRIBUTING.md) as well as our [developer guide](https://github.com/opensearch-project/data-prepper/blob/main/docs/developer_guide.md) and [plugin development guide](https://github.com/opensearch-project/data-prepper/blob/main/docs/plugin_development.md).

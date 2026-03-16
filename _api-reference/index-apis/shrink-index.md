@@ -1,37 +1,26 @@
 ---
 layout: default
 title: Shrink index
-parent: Index APIs
-nav_order: 65
+parent: Index operations
+grand_parent: Index APIs
+nav_order: 100
 redirect_from:
   - /opensearch/rest-api/index-apis/shrink-index/
 ---
 
-# Shrink index
+# Shrink Index API
 **Introduced 1.0**
 {: .label .label-purple }
 
-The shrink index API operation moves all of your data in an existing index into a new index with fewer primary shards.
+The shrink index API operation moves all of your data in an existing read-only index into a new index with fewer primary shards. This operation requires that a copy of each shard, either primary or replica, is located on the same node. You can use [shard allocation filtering]({{site.url}}{{site.baseurl}}/api-reference/index-apis/shard-allocation/) to move shards to the same node.
 
-## Example
+To make the index read-only, set the [dynamic index-level index setting]({{site.url}}{{site.baseurl}}/install-and-configure/configuring-opensearch/index-settings/#dynamic-index-level-index-settings) `index.blocks.write` to `true`.
+{: .note}
+
+
+## Endpoints
 
 ```json
-POST /my-old-index/_shrink/my-new-index
-{
-  "settings": {
-    "index.number_of_replicas": 4,
-    "index.number_of_shards": 3
-  },
-  "aliases":{
-    "new-index-alias": {}
-  }
-}
-```
-{% include copy-curl.html %}
-
-## Path and HTTP methods
-
-```
 POST /<index-name>/_shrink/<target-index>
 PUT /<index-name>/_shrink/<target-index>
 ```
@@ -44,27 +33,32 @@ When creating new indexes with this operation, remember that OpenSearch indexes 
 
   `:`, `"`, `*`, `+`, `/`, `\`, `|`, `?`, `#`, `>`, or `<`
 
-## URL parameters
-
-The shrink index API operation requires you to specify both the source index and the target index. All other parameters are optional.
+## Path parameters
 
 Parameter | Type | description
 :--- | :--- | :---
 &lt;index-name&gt; | String | The index to shrink.
 &lt;target-index&gt; | String | The target index to shrink the source index into.
+
+## Query parameters
+
+The shrink index API operation requires you to specify both the source index and the target index. All other parameters are optional.
+
+Parameter | Type | description
+:--- | :--- | :---
 wait_for_active_shards | String | Specifies the number of active shards that must be available before OpenSearch processes the request. Default is 1 (only the primary shard). Set to all or a positive integer. Values greater than 1 require replicas. For example, if you specify a value of 3, the index must have two replicas distributed across two additional nodes for the request to succeed.
 cluster_manager_timeout | Time | How long to wait for a connection to the cluster manager node. Default is `30s`.
 timeout | Time | How long to wait for the request to return a response. Default is `30s`.
 wait_for_completion | Boolean | When set to `false`, the request returns immediately instead of after the operation is finished. To monitor the operation status, use the [Tasks API]({{site.url}}{{site.baseurl}}/api-reference/tasks/) with the task ID returned by the request. Default is `true`.
 task_execution_timeout | Time | The explicit task execution timeout. Only useful when wait_for_completion is set to `false`. Default is `1h`.
 
-## Request body
+## Request body fields
 
 You can use the request body to configure some index settings for the target index. All fields are optional.
 
 Field | Type | Description
 :--- | :--- | :---
-alias | Object | Sets an alias for the target index. Can have the fields `filter`, `index_routing`, `is_hidden`, `is_write_index`, `routing`, or `search_routing`. See [Index Aliases]({{site.url}}{{site.baseurl}}/api-reference/alias/#request-body).
+alias | Object | Sets an alias for the target index. Can have the fields `filter`, `index_routing`, `is_hidden`, `is_write_index`, `routing`, or `search_routing`. See [Alias APIs]({{site.url}}{{site.baseurl}}/api-reference/alias/).
 settings | Object | Index settings you can apply to your target index. See [Index Settings]({{site.url}}{{site.baseurl}}/im-plugin/index-settings/).
 [max_shard_size](#the-max_shard_size-parameter) | Bytes | Specifies the maximum size of a primary shard in the target index. Because `max_shard_size` conflicts with the `index.number_of_shards` setting, you cannot set both of them at the same time. 
 
@@ -85,3 +79,56 @@ The minimum number of primary shards for the target index is 1.
 ## Index codec considerations
 
 For index codec considerations, see [Index codecs]({{site.url}}{{site.baseurl}}/im-plugin/index-codecs/#splits-and-shrinks).
+
+## Example request
+
+<!-- spec_insert_start
+component: example_code
+rest: POST /my-old-index/_shrink/my-new-index
+body: |
+{
+  "settings": {
+    "index.number_of_replicas": 4,
+    "index.number_of_shards": 3
+  },
+  "aliases":{
+    "new-index-alias": {}
+  }
+}
+-->
+{% capture step1_rest %}
+POST /my-old-index/_shrink/my-new-index
+{
+  "settings": {
+    "index.number_of_replicas": 4,
+    "index.number_of_shards": 3
+  },
+  "aliases": {
+    "new-index-alias": {}
+  }
+}
+{% endcapture %}
+
+{% capture step1_python %}
+
+
+response = client.indices.shrink(
+  index = "my-old-index",
+  target = "my-new-index",
+  body =   {
+    "settings": {
+      "index.number_of_replicas": 4,
+      "index.number_of_shards": 3
+    },
+    "aliases": {
+      "new-index-alias": {}
+    }
+  }
+)
+
+{% endcapture %}
+
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->

@@ -3,23 +3,23 @@ layout: default
 title: Search agent
 parent: Agent APIs
 grand_parent: ML Commons APIs
-nav_order: 30
+nav_order: 35
 ---
 
-# Search for an agent
+# Search Agent API
 **Introduced 2.13**
 {: .label .label-purple }
 
 Use this command to search for agents you've already created. You can provide any OpenSearch search query in the request body.
 
-## Path and HTTP methods
+## Endpoints
 
 ```json
 GET /_plugins/_ml/agents/_search
 POST /_plugins/_ml/agents/_search
 ```
 
-#### Example request: Searching for all agents
+## Example request: Searching for all agents
 
 ```json
 POST /_plugins/_ml/agents/_search
@@ -32,7 +32,7 @@ POST /_plugins/_ml/agents/_search
 ```
 {% include copy-curl.html %}
 
-#### Example request: Searching for agents of a certain type
+## Example request: Searching for agents of a certain type
 
 ```json
 POST /_plugins/_ml/agents/_search
@@ -69,7 +69,7 @@ GET _plugins/_ml/agents/_search
 ```
 {% include copy-curl.html %}
 
-#### Example response
+## Example response
 
 ```json
 {
@@ -134,6 +134,6 @@ Assistant:"""
 }
 ```
 
-## Response fields
+## Response body fields
 
-For response field descriptions, see [Register Agent API request fields]({{site.url}}{{site.baseurl}}/ml-commons-plugin/api/agent-apis/register-agent#request-fields).
+For response field descriptions, see [Register Agent API request fields]({{site.url}}{{site.baseurl}}/ml-commons-plugin/api/agent-apis/register-agent#request-body-fields).

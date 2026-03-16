@@ -1,17 +1,17 @@
 ---
 layout: default
-title: Example API 
+title: Example operation
 parent: 
 nav_order: 
 ---
 
-# Example API 
+# Example Operation API 
 Introduced 1.0
 {: .label .label-purple }
 
 The Example API ... (descriptive sentence about what this API does).
 
-## Path and HTTP methods
+## Endpoints
 
 ```json
 POST /_example/endpoint/
@@ -30,13 +30,13 @@ The following table lists the available path parameters. All path parameters are
 
 The following table lists the available query parameters. All query parameters are optional.
 
-| Parameter | Data type | Description |
+| Parameter |  Data type | Description |
 | :--- | :--- | :--- |
 | `query_parameter` | String | Example query parameter description. Default is ... |
 
-## Request fields
+## Request body fields
 
-The following table lists the available request fields.
+The following table lists the available request body fields.
 
 | Field | Data type | Description |
 | :--- | :--- | :--- |
@@ -44,26 +44,20 @@ The following table lists the available request fields.
 | `example_object.required_request_field` | Type | Required request field description. Required. |
 | `example_object.optional_request_field` | Type | Optional request field description. Optional. Default is ... |
 
-#### Example request
+## Example request
 
 ```json
 POST /_example/endpoint/
 {
-    "example_object": {
-        "required_request_field": "example value",
-        "optional_request_field": "example value"
-    }
+  "example_object": {
+      "required_request_field": "example value",
+      "optional_request_field": "example value"
+  }
 }
 ```
 {% include copy-curl.html %}
 
-#### Example response
-
-<details open markdown="block">
-  <summary>
-    Response
-  </summary>
-  {: .text-delta}
+## Example response
 
 ```json
 {
@@ -74,11 +68,10 @@ POST /_example/endpoint/
   }
 }
 ```
-</details>
 
-## Response fields
+## Response body fields
 
-The following table lists all response fields.
+The following table lists all response body fields.
 
 | Field | Data type | Description |
 | :--- | :--- | :--- |

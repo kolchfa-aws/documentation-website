@@ -30,7 +30,7 @@ A simple way to validate the user input and LLM output is to provide a set of pr
 
 ### Step 1: Create a guardrail index
 
-To start, create an index that will store the excluded words (_stopwords_). In the index settings, specify a `title` field, which will contain excluded words, and a `query` field of the [percolator]({{site.url}}{{site.baseurl}}/field-types/supported-field-types/percolator/) type. The percolator query will be used to match the LLM input or output:
+To start, create an index that will store the excluded words (_stopwords_). In the index settings, specify a `title` field, which will contain excluded words, and a `query` field of the [percolator]({{site.url}}{{site.baseurl}}/mappings/supported-field-types/percolator/) type. The percolator query will be used to match the LLM input or output:
 
 ```json
 PUT /words0
@@ -211,7 +211,7 @@ OpenSearch returns the task ID of the register operation:
 }
 ```
 
-To check the status of the operation, provide the task ID to the [Tasks API]({{site.url}}{{site.baseurl}}/ml-commons-plugin/api/tasks-apis/get-task/):
+To check the status of the operation, provide the task ID to the [Get ML Task API]({{site.url}}{{site.baseurl}}/ml-commons-plugin/api/tasks-apis/get-task/):
 
 ```bash
 GET /_plugins/_ml/tasks/cVeMb4kBJ1eYAeTMFFgj
@@ -404,7 +404,7 @@ OpenSearch returns the task ID of the register operation and the model ID of the
 }
 ```
 
-To check the status of the operation, provide the task ID to the [Tasks API]({{site.url}}{{site.baseurl}}/ml-commons-plugin/api/tasks-apis/get-task/):
+To check the status of the operation, provide the task ID to the [Get ML Task API]({{site.url}}{{site.baseurl}}/ml-commons-plugin/api/tasks-apis/get-task/):
 
 ```bash
 GET /_plugins/_ml/tasks/onJaDZABNFJeYR3I2fQ1
@@ -637,3 +637,4 @@ OpenSearch responds with an error.
 ## Next steps
 
 - For more information about configuring guardrails, see [The `guardrails` parameter]({{site.url}}{{site.baseurl}}/ml-commons-plugin/api/model-apis/register-model/#the-guardrails-parameter).
+- For a tutorial demonstrating how to use Amazon Bedrock guardrails, see [Using Amazon Bedrock guardrails]({{site.url}}{{site.baseurl}}/vector-search/tutorials/model-controls/bedrock-guardrails/).

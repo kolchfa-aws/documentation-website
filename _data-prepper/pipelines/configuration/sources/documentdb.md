@@ -1,18 +1,18 @@
 ---
 layout: default
-title: documentdb
+title: DocumentDB
 parent: Sources
 grand_parent: Pipelines
-nav_order: 2
+nav_order: 10
 ---
 
-# documentdb
+# DocumentDB source
 
 The `documentdb` source reads documents from [Amazon DocumentDB](https://aws.amazon.com/documentdb/) collections.
 It can read historical data from an export and keep up to date on the data using Amazon DocumentDB [change streams](https://docs.aws.amazon.com/documentdb/latest/developerguide/change_streams.html).
 
 The `documentdb` source reads data from Amazon DocumentDB and puts that data into an [Amazon Simple Storage Service (Amazon S3)](https://aws.amazon.com/s3/) bucket.
-Then, other Data Prepper workers read from the S3 bucket to process data.
+Then, other OpenSearch Data Prepper workers read from the S3 bucket to process data.
 
 ## Usage
 The following example pipeline uses the `documentdb` source:
@@ -37,7 +37,7 @@ documentdb-pipeline:
           stream: true
       acknowledgments: true
 ```
-{% include copy-curl.html %}
+{% include copy.html %}
 
 ## Configuration
 

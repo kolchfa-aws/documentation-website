@@ -5,11 +5,11 @@ parent: Nodes APIs
 nav_order: 10
 ---
 
-# Nodes info
+# Nodes Info API
 **Introduced 1.0**
 {: .label .label-purple }
 
-The nodes info API represents mostly static information about your cluster's nodes, including but not limited to:
+The Nodes Info API represents mostly static information about your cluster's nodes, including the following:
 
 - Host system information 
 - JVM 
@@ -18,25 +18,10 @@ The nodes info API represents mostly static information about your cluster's nod
 - Thread pools settings 
 - Installed plugins
 
-## Example
 
-To get information about all nodes in a cluster, use the following query:
-
-```json
-GET /_nodes
-```
-{% include copy-curl.html %}
-
-To get thread pool information about the cluster manager node only, use the following query:
+## Endpoints
 
 ```json
-GET /_nodes/master:true/thread_pool
-```
-{% include copy-curl.html %}
-
-## Path and HTTP methods
-
-```bash
 GET /_nodes
 GET /_nodes/<nodeId>
 GET /_nodes/<metrics>
@@ -67,6 +52,7 @@ transport | Mostly static information about the transport layer.
 http | Mostly static information about the HTTP layer.
 plugins | Information about installed plugins and modules.
 ingest | Information about ingest pipelines and available ingest processors.
+search_pipelines | Information about search pipelines configured on the node.
 aggregations | Information about available [aggregations]({{site.url}}{{site.baseurl}}/opensearch/aggregations).
 indices | Static index settings configured at the node level.
 
@@ -79,16 +65,59 @@ Parameter | Type | Description
 flat_settings| Boolean | Specifies whether to return the `settings` object of the response in flat format. Default is `false`.
 timeout | Time | Sets the time limit for node response. Default value is `30s`.
 
-#### Example request
+## Example request
 
 The following query requests the `process` and `transport` metrics from the cluster manager node: 
 
-```json
+<!-- spec_insert_start
+component: example_code
+rest: GET /_nodes/cluster_manager:true/process,transport
+-->
+{% capture step1_rest %}
 GET /_nodes/cluster_manager:true/process,transport
-```
-{% include copy-curl.html %}
+{% endcapture %}
 
-#### Example response
+{% capture step1_python %}
+
+
+response = client.nodes.info(
+  metric = "process,transport",
+  node_id = "cluster_manager:true"
+)
+
+{% endcapture %}
+
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->
+
+To get thread pool information about the cluster manager node only, use the following query:
+
+<!-- spec_insert_start
+component: example_code
+rest: GET /_nodes/master:true/thread_pool
+-->
+{% capture step1_rest %}
+GET /_nodes/master:true/thread_pool
+{% endcapture %}
+
+{% capture step1_python %}
+
+
+response = client.nodes.info(
+  metric = "thread_pool",
+  node_id = "master:true"
+)
+
+{% endcapture %}
+
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->
+
+## Example response
 
 The response contains the metric groups specified in the `<metrics>` request parameter (in this case, `process` and `transport`):
 
@@ -136,7 +165,7 @@ The response contains the metric groups specified in the `<metrics>` request par
 }
 ```
 
-## Response fields
+## Response body fields
 
 The response contains the basic node identification and build info for every node matching the `<nodeId>` request parameter. The following table lists the response fields.
 
@@ -161,6 +190,7 @@ http | Information about the HTTP address, including bound address, publish addr
 plugins | Information about the installed plugins, including name, version, OpenSearch version, Java version, description, class name, custom folder name, a list of extended plugins, and `has_native_controller`, which specifies whether the plugin has a native controller process. 
 modules | Information about the modules, including name, version, OpenSearch version, Java version, description, class name, custom folder name, a list of extended plugins, and `has_native_controller`, which specifies whether the plugin has a native controller process. Modules are different from plugins because modules are loaded into OpenSearch automatically, while plugins have to be installed manually.
 ingest | Information about ingest pipelines and processors.
+search_pipelines | Information about search pipelines configured on the node.
 aggregations | Information about the available aggregation types.
 
 

@@ -6,6 +6,7 @@ has_children: true
 redirect_from:
   - /monitoring-plugins/pa/
   - /monitoring-plugins/pa/index/
+  - /monitoring-your-cluster/pa/
 ---
 
 # Performance Analyzer
@@ -60,12 +61,12 @@ private-key-file-path = specify_path
 
 The Performance Analyzer plugin is included in the installations for [Docker]({{site.url}}{{site.baseurl}}/opensearch/install/docker/) and [tarball]({{site.url}}{{site.baseurl}}/opensearch/install/tar/), but you can also install the plugin manually. 
 
-To install the Performance Analyzer plugin manually, download the plugin from [Maven](https://search.maven.org/search?q=org.opensearch.plugin) and install it using the standard [plugin installation]({{site.url}}{{site.baseurl}}/opensearch/install/plugins/) process. Performance Analyzer runs on each node in a cluster.
+To install the Performance Analyzer plugin manually, download the plugin from [Maven](https://central.sonatype.com/namespace/org.opensearch.plugin) and install it using the standard [plugin installation]({{site.url}}{{site.baseurl}}/opensearch/install/plugins/) process. Performance Analyzer runs on each node in a cluster.
 
 To start the Performance Analyzer root cause analysis (RCA) agent on a tarball installation, run the following command:
       
 ````bash
-OPENSEARCH_HOME=~/opensearch-2.2.1 OPENSEARCH_JAVA_HOME=~/opensearch-2.2.1/jdk OPENSEARCH_PATH_CONF=~/opensearch-2.2.1/bin ./performance-analyzer-agent-cli
+OPENSEARCH_HOME=~/opensearch-{{ site.opensearch_version }} OPENSEARCH_JAVA_HOME=~/opensearch-{{ site.opensearch_version }}/jdk OPENSEARCH_PATH_CONF=~/opensearch-{{ site.opensearch_version }}/bin ./performance-analyzer-agent-cli
 ````
 
 The following command enables the Performance Analyzer plugin. 
@@ -148,7 +149,7 @@ agent-stats-metadata = agent-stats-metadata
 To start the Performance Analyzer RCA agent, run the following command:
 
 ````bash
-OPENSEARCH_HOME=~/opensearch-2.2.1 OPENSEARCH_JAVA_HOME=~/opensearch-2.2.1/jdk OPENSEARCH_PATH_CONF=~/opensearch-2.2.1/bin ./performance-analyzer-agent-cli
+OPENSEARCH_HOME=~/opensearch-{{ site.opensearch_version }} OPENSEARCH_JAVA_HOME=~/opensearch-{{ site.opensearch_version }}/jdk OPENSEARCH_PATH_CONF=~/opensearch-{{ site.opensearch_version }}/bin ./performance-analyzer-agent-cli
 ````
 
 

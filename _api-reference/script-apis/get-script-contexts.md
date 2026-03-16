@@ -1,24 +1,37 @@
 ---
 layout: default
-title: Get Stored Script Contexts
+title: Get script contexts
 parent: Script APIs
-nav_order: 5
+nav_order: 70
 ---
 
-# Get stored script contexts
+# Get Script Contexts API
 **Introduced 1.0**
 {: .label .label-purple }
 
-Retrieves all contexts for stored scripts.
+Retrieves all available contexts where scripts can be used, such as search, update, or aggregation contexts.
 
-#### Example request
+## Example request
 
-````json
-GET _script_context
-````
-{% include copy-curl.html %}
+<!-- spec_insert_start
+component: example_code
+rest: GET /_script_context
+-->
+{% capture step1_rest %}
+GET /_script_context
+{% endcapture %}
 
-#### Example response
+{% capture step1_python %}
+
+response = client.get_script_context()
+{% endcapture %}
+
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->
+
+## Example response
 
 The `GET _script_context` request returns the following fields:
 
@@ -547,7 +560,7 @@ The `GET _script_context` request returns the following fields:
 }
 ````
 
-## Response fields
+## Response body fields
 
 The `GET _script_context` request returns the following response fields:
 

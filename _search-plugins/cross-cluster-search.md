@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Cross-cluster search
-nav_order: 65
+nav_order: 230
 redirect_from:
  - /security/access-control/cross-cluster-search/
  - /security-plugin/access-control/cross-cluster-search/
@@ -9,7 +9,7 @@ redirect_from:
 
 # Cross-cluster search
 
-You can use the cross-cluster search feature in OpenSearch to search and analyze data across multiple clusters, enabling you to gain insights from distributed data sources. Cross-cluster search is available by default with the Security plugin, but you need to configure each cluster to allow remote connections from other clusters. This involves setting up remote cluster connections and configuring access permissions.
+You can use cross-cluster search (CCS) in OpenSearch to search and analyze data across multiple clusters, enabling you to gain insights from distributed data sources. Cross-cluster search is available by default with the Security plugin, but you need to configure each cluster to allow remote connections from other clusters. This involves setting up remote cluster connections and configuring access permissions.
 
 ---
 
@@ -19,6 +19,17 @@ You can use the cross-cluster search feature in OpenSearch to search and analyze
 
 
 ---
+
+## Prerequisite
+
+Before configuring cross-cluster search, ensure that the following prerequisite is met:
+
+- If you've overridden `node.roles` in `opensearch.yml` for any node in a cluster participating in cross-cluster search, ensure that the `node.roles` setting includes the `remote_cluster_client` role:
+
+   ```yaml
+   node.roles: [<other_roles>, remote_cluster_client]
+   ```
+   {% include copy.html %}
 
 ## Authentication flow
 
@@ -38,7 +49,7 @@ To query indexes on remote clusters, users must have `READ` or `SEARCH` permissi
 indices:admin/shards/search_shards
 ```
 
-For more information about the `ccs_minimize_roundtrips` parameter, see the list of [URL Parameters]({{site.url}}{{site.baseurl}}/api-reference/search/#url-parameters) for the Search API.
+For more information about the `ccs_minimize_roundtrips` parameter, see the list of [parameters]({{site.url}}{{site.baseurl}}/api-reference/search/#query-parameters) for the Search API.
 
 #### Example roles.yml configuration
 
@@ -61,7 +72,7 @@ humanresources:
 
 ## Sample Docker setup
 
-To define Docker permissions, save the following sample file as `docker-compose.yml` and run `docker-compose up` to start two single-node clusters on the same network:
+To define Docker permissions, save the following sample file as `docker-compose.yml` and run `docker compose up` to start two single-node clusters on the same network:
 
 ```yml
 version: '3'

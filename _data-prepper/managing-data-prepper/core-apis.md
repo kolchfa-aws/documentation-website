@@ -1,13 +1,13 @@
 ---
 layout: default
 title: Core APIs
-parent: Managing Data Prepper
+parent: Managing OpenSearch Data Prepper
 nav_order: 15
 ---
 
 # Core APIs
 
-All Data Prepper instances expose a server with some control APIs. By default, this server runs on port 4900. Some plugins, especially source plugins, may expose other servers that run on different ports. Configurations for these plugins are independent of the core API. For example, to shut down Data Prepper, you can run the following curl request:
+All OpenSearch Data Prepper instances expose a server with some control APIs. By default, this server runs on port 4900. Some plugins, especially source plugins, may expose other servers that run on different ports. Configurations for these plugins are independent of the core API. For example, to shut down Data Prepper, you can run the following curl request:
 
 ```
 curl -X POST http://localhost:4900/shutdown
@@ -72,7 +72,7 @@ authentication:
 
 ### Peer Forwarder
 
-Peer Forwarder can be configured to enable stateful aggregation across multiple Data Prepper nodes. For more information about configuring Peer Forwarder, see [Peer forwarder]({{site.url}}{{site.baseurl}}/data-prepper/managing-data-prepper/peer-forwarder/). It is supported by the `service_map_stateful`, `otel_traces_raw`, and `aggregate` processors.
+Peer Forwarder can be configured to enable stateful aggregation across multiple Data Prepper nodes. For more information about configuring Peer Forwarder, see [Peer forwarder]({{site.url}}{{site.baseurl}}/data-prepper/managing-data-prepper/peer-forwarder/). It is supported by the `service_map`, `otel_traces`, and `aggregate` processors.
 
 ### Shutdown timeouts
 

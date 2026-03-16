@@ -2,7 +2,7 @@
 layout: default
 title: REST layer authorization
 parent: Access control
-nav_order: 80
+nav_order: 85
 ---
 
 
@@ -15,6 +15,8 @@ For users that work with REST layer authorization, the methods of assigning role
 Developers, on the other hand, will need to understand the ideas behind `NamedRoute` and how the new route scheme is constructed. For detailed information, see [Authorization at REST Layer for plugins](https://github.com/opensearch-project/security/blob/main/REST_AUTHZ_FOR_PLUGINS.md).
 
 The benefits of using the REST layer for authorization include the ability to authorize requests at the REST layer and filter out unauthorized requests. As a result, this decreases the processing burden on the transport layer while allowing granular control over access to APIs.
+
+Some read operations, such as  [scroll]({{site.url}}{{site.baseurl}}/api-reference/scroll/), manage state. Therefore, it is recommended to control read and write access using the Security plugin [permissions]({{site.url}}{{site.baseurl}}/security/access-control/permissions/), instead of allowing/blocking HTTP request verbs.
 
 You must have the Security plugin enabled to use REST layer authorization.
 {: .note }

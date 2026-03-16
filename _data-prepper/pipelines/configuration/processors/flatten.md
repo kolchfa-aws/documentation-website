@@ -1,12 +1,12 @@
 ---
 layout: default
-title: flatten 
+title: Flatten 
 parent: Processors
 grand_parent: Pipelines
-nav_order: 48
+nav_order: 140
 ---
 
-# flatten
+# Flatten processor
 
 The `flatten` processor transforms nested objects inside of events into flattened structures. 
 
@@ -21,12 +21,12 @@ Option | Required | Type | Description
 `exclude_keys` | No | List | The keys from the source field that should be excluded from processing. Default is an empty list (`[]`).
 `remove_processed_fields` | No | Boolean | When `true`, the processor removes all processed fields from the source. Default is `false`.
 `remove_list_indices` | No | Boolean | When `true`, the processor converts the fields from the source map into lists and puts the lists into the target field. Default is `false`.
-`flatten_when` | No | String | A [conditional expression](https://opensearch.org/docs/latest/data-prepper/pipelines/expression-syntax/), such as `/some-key == "test"'`, that determines whether the `flatten` processor will be run on the event. Default is `null`, which means that all events will be processed unless otherwise stated.
+`flatten_when` | No | String | A [conditional expression]({{site.url}}{{site.baseurl}}/data-prepper/pipelines/expression-syntax/), such as `/some-key == "test"'`, that determines whether the `flatten` processor will be run on the event. Default is `null`, which means that all events will be processed unless otherwise stated.
 `tags_on_failure` | No | List | A list of tags to add to the event metadata when the event fails to process.
 
 ## Usage
 
-The following examples show how the `flatten` processor can be used in Data Prepper pipelines.
+The following examples show how the `flatten` processor can be used in OpenSearch Data Prepper pipelines.
 
 ### Minimum configuration
 
@@ -84,6 +84,7 @@ Use the `remove_processed_fields` option when flattening all of an event's neste
         remove_processed_fields: true
 ...
 ```
+{% include copy.html %}
 
 For example, when the input event contains the following nested objects:
 
@@ -140,6 +141,7 @@ Use the `exclude_keys` option to prevent specific keys from being flattened in t
         exclude_keys: ["key2"]
 ...
 ```
+{% include copy.html %}
 
 For example, when the input event contains the following nested objects:
 
@@ -199,6 +201,7 @@ Use the `remove_list_indices` option to convert the fields from the source map i
         remove_list_indices: true
 ...
 ```
+{% include copy.html %}
 
 For example, when the input event contains the following nested objects:
 

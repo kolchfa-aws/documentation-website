@@ -2,7 +2,6 @@
 layout: default
 title: Histogram
 parent: Bucket aggregations
-grand_parent: Aggregations
 nav_order: 100
 redirect_from:
   - /query-dsl/aggregations/bucket/histogram/
@@ -50,5 +49,12 @@ GET opensearch_dashboards_sample_data_logs/_search
     ]
   }
  }
-}
 ```
+
+### Parameters
+
+`histogram` aggregations support the following parameters.
+
+| Parameter  | Required/Optional | Data type             | Description |
+| :--        | :--               | :--                   | :--         |
+| `interval`  | Required         | Numeric               | The field value width used to construct each bucket. |

@@ -11,8 +11,6 @@ redirect_from:
 
 The Security plugin REST API lets you programmatically create and manage users, roles, role mappings, action groups, and tenants.
 
----
-
 #### Table of contents
 1. TOC
 {:toc}
@@ -171,14 +169,14 @@ Introduced 1.0
 
 Changes the password for the current user.
 
-#### Path and HTTP methods
+#### Endpoints
 
 ```json
 PUT _plugins/_security/api/account
 ```
 {% include copy-curl.html %}
 
-#### Request fields
+#### Request body fields
 
 | Field              | Data type  | Description                    | Required  |
 |:-------------------|:-----------|:-------------------------------|:----------|
@@ -206,7 +204,7 @@ PUT _plugins/_security/api/account
 }
 ```
 
-#### Response fields
+#### Response body fields
 
 | Field    | Data type  | Description                   |
 |:---------|:-----------|:------------------------------|
@@ -940,6 +938,22 @@ PUT _plugins/_security/api/rolesmapping/<role>
 ```
 {% include copy-curl.html %}
 
+#### Host-based role mapping
+
+The `hosts` parameter maps requests originating from specific IP addresses or hostnames to the given role. CIDR blocks are not supported, but you can use wildcard patterns (globs), such as `192.168.*.*` or `*.example.com`. This is useful when you want to assign roles based on the client's source address:
+
+* To match by IP address (for example, `"192.168.1.10"`), no additional configuration is needed.
+* To match by hostname (for example, `"myserver.example.com"`), you must set the cluster-level configuration parameter:
+
+  ```yaml
+  opensearch_security.host_resolver_mode: ip-hostname
+  ```
+
+  This enables reverse DNS lookups to resolve hostnames. For more information, see [Configuring OpenSearch]({{site.url}}{{site.baseurl}}/install-and-configure/configuring-opensearch/index/).
+
+Using `"*"` in `hosts` matches all client IPs and hostnames, meaning this role will be applied to every request, regardless of user. This can unintentionally overgrant access if used alongside `users: ["someuser"]`. Avoid setting `hosts: ["*"]` unless you're intentionally granting the role to all client IPs.
+{: .warning}
+
 #### Example response
 
 ```json
@@ -1426,7 +1440,7 @@ GET _plugins/_security/api/_upgrade_check
 }
 ```
 
-#### Response fields
+#### Response body fields
 
 | Field    | Data type  | Description                   |
 |:---------|:-----------|:------------------------------|
@@ -1453,7 +1467,7 @@ POST _plugins/_security/api/_upgrade_perform
 ```
 {% include copy-curl.html %}
 
-#### Request fields
+#### Request body fields
 
 | Field           | Data type  | Description                                                                                                       | Required |
 |:----------------|:-----------|:------------------------------------------------------------------------------------------------------------------|:---------|
@@ -1473,7 +1487,7 @@ POST _plugins/_security/api/_upgrade_perform
 }
 ```
 
-#### Response fields
+#### Response body fields
 
 | Field    | Data type  | Description                   |
 |:---------|:-----------|:------------------------------|
@@ -1568,14 +1582,14 @@ PUT _plugins/_security/api/nodesdn/<cluster-name>
 
 Makes a bulk update for the list of distinguished names.
 
-#### Path and HTTP methods
+#### Endpoints
 
 ```json
 PATCH _plugins/_security/api/nodesdn
 ```
 {% include copy-curl.html %}
 
-#### Request fields
+#### Request body fields
 
 | Field           | Data type  | Description                                                                                                       | Required |
 |:----------------|:-----------|:------------------------------------------------------------------------------------------------------------------|:---------|
@@ -1607,7 +1621,7 @@ PATCH _plugins/_security/api/nodesdn
 }
 ```
 
-#### Response fields
+#### Response body fields
 
 | Field   | Data type | Description          |
 |:--------|:----------|:---------------------|
@@ -1682,7 +1696,7 @@ GET _plugins/_security/api/ssl/certs
 
 Reload transport layer communication certificates. These REST APIs let a super admin (or a user with sufficient permissions to access this API) reload transport layer certificates.
 
-#### Path and HTTP methods
+#### Endpoints
 
 ```json
 PUT /_plugins/_security/api/ssl/transport/reloadcerts
@@ -1705,7 +1719,7 @@ curl -X PUT "https://your-opensearch-cluster/_plugins/_security/api/ssl/transpor
 }
 ```
 
-#### Response fields
+#### Response body fields
 
 | Field   | Data type | Description                                                                       |
 |:--------|:----------|:----------------------------------------------------------------------------------|
@@ -1717,7 +1731,7 @@ curl -X PUT "https://your-opensearch-cluster/_plugins/_security/api/ssl/transpor
 
 Reload HTTP layer communication certificates. These REST APIs let a super admin (or a user with sufficient permissions to access this API) reload HTTP layer certificates.
 
-#### Path and HTTP methods
+#### Endpoints
 
 ```json
 PUT /_plugins/_security/api/ssl/http/reloadcerts
@@ -1741,7 +1755,7 @@ curl -X PUT "https://your-opensearch-cluster/_plugins/_security/api/ssl/http/rel
 }
 ```
 
-#### Response fields
+#### Response body fields
 
 | Field   | Data type | Description                                                         |
 |:--------|:----------|:--------------------------------------------------------------------|
@@ -1822,7 +1836,7 @@ For details on using audit logging to track access to OpenSearch clusters, as we
 You can do an initial configuration of audit logging in the `audit.yml` file, found in the `opensearch-project/security/config` directory. Thereafter, you can use the REST API or Dashboards for further changes to the configuration.
 {: note.}
 
-#### Request fields
+#### Request body fields
 
 Field | Data type | Description
 :--- | :--- | :---
@@ -1870,7 +1884,7 @@ Changes to the `_readonly` property result in a 409 error, as indicated in the r
 A GET call retrieves the audit configuration.
 
 ```json
-GET /_opendistro/_security/api/audit
+GET /_plugins/_security/api/audit
 ```
 {% include copy-curl.html %}
 
@@ -1879,7 +1893,7 @@ GET /_opendistro/_security/api/audit
 A PUT call updates the audit configuration.
 
 ```json
-PUT /_opendistro/_security/api/audit/config
+PUT /_plugins/_security/api/audit/config
 {
   "enabled": true,
   "audit": {
@@ -1923,7 +1937,7 @@ A PATCH call is used to update specified fields in the audit configuration. The 
 Using the PATCH method also requires a user to have a security configuration that includes admin certificates for encryption. To find out more about these certificates, see [Configuring admin certificates]({{site.url}}{{site.baseurl}}/security/configuration/tls/#configuring-admin-certificates).
 
 ```bash
-curl -X PATCH -k -i --cert <admin_cert file name> --key <admin_cert_key file name> <domain>/_opendistro/_security/api/audit -H 'Content-Type: application/json' -d'[{"op":"add","path":"/config/enabled","value":"true"}]'
+curl -X PATCH -k -i --cert <admin_cert file name> --key <admin_cert_key file name> <domain>/_plugins/_security/api/audit -H 'Content-Type: application/json' -d'[{"op":"add","path":"/config/enabled","value":"true"}]'
 ```
 {% include copy.html %}
 
@@ -1992,3 +2006,11 @@ HTTP/1.1 200 OK
 content-type: application/json; charset=UTF-8
 content-length: 45
 ```
+
+---
+
+## Resource sharing
+**Introduced 3.3**
+{: .label .label-purple }
+
+For managing resource-level access control and sharing plugin-defined resources such as ML models and anomaly detectors, see [Resource sharing APIs]({{site.url}}{{site.baseurl}}/security/access-control/resource-sharing-api/).

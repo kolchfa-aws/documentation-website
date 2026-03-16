@@ -4,6 +4,8 @@ title: Workflow APIs
 nav_order: 40
 has_children: true
 has_toc: false
+redirect_from:
+  - /automating-configurations/api/
 ---
 
 # Workflow APIs
@@ -19,3 +21,5 @@ OpenSearch supports the following workflow APIs:
 * [Search workflow state]({{site.url}}{{site.baseurl}}/automating-configurations/api/search-workflow-state/)
 * [Deprovision workflow]({{site.url}}{{site.baseurl}}/automating-configurations/api/deprovision-workflow/)
 * [Delete workflow]({{site.url}}{{site.baseurl}}/automating-configurations/api/delete-workflow/)
+
+For information about workflow access control, see [Workflow template security]({{site.url}}{{site.baseurl}}/automating-configurations/workflow-security/).

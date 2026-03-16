@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Log ingestion
-nav_order: 30
+nav_order: 20
 redirect_from:
   - /observability-plugin/log-analytics/
 ---
@@ -37,7 +37,7 @@ Download or clone the [Data Prepper repository](https://github.com/opensearch-pr
 - A single-node OpenSearch cluster (`opensearch`)
 - OpenSearch Dashboards (`opensearch-dashboards`).
 
-Close the file and run `docker-compose up --build` to start the containers.
+Close the file and run `docker compose up --build` to start the containers.
 
 After the containers start, your ingestion pipeline is set up and ready to ingest log data. The `fluent-bit` container is configured to read log data from `test.log`. Run the following command to generate log data to send to the log ingestion pipeline.
 

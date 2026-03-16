@@ -5,15 +5,15 @@ parent: Nodes APIs
 nav_order: 40
 ---
 
-# Nodes usage
+# Nodes Usage API
 **Introduced 1.0**
 {: .label .label-purple }
 
 The nodes usage endpoint returns low-level information about REST action usage on nodes.
 
-## Path and HTTP methods
+## Endpoints
 
-```
+```json
 GET _nodes/usage
 GET _nodes/<nodeId>/usage
 GET _nodes/usage/<metric>
@@ -38,16 +38,33 @@ Parameter | Type | Description
 timeout | Time | Sets the time limit for a response from the node. Default is `30s`.
 cluster_manager_timeout | Time | Sets the time limit for a response from the cluster manager. Default is `30s`.
 
-#### Example request
+## Example request
 
 The following request returns usage details for all nodes:
 
-```
-GET _nodes/usage
-```
-{% include copy-curl.html %}
+<!-- spec_insert_start
+component: example_code
+rest: GET /_nodes/usage
+-->
+{% capture step1_rest %}
+GET /_nodes/usage
+{% endcapture %}
 
-#### Example response
+{% capture step1_python %}
+
+
+response = client.nodes.info(
+  node_id_or_metric = "usage"
+)
+
+{% endcapture %}
+
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->
+
+## Example response
 
 The following is an example response:
 

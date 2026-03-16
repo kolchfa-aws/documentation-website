@@ -1,15 +1,21 @@
 ---
 layout: default
-title: Get Stored Script
+title: Get stored script
 parent: Script APIs
-nav_order: 3
+nav_order: 30
 ---
 
-# Get stored script
+# Get Stored Script API
 **Introduced 1.0**
 {: .label .label-purple }
 
-Retrieves a stored script.
+Retrieves a stored script from the cluster state.
+
+## Endpoints
+
+```json
+GET _scripts/my-first-script
+```
 
 ## Path parameters
 
@@ -23,16 +29,33 @@ Retrieves a stored script.
 :--- | :--- | :---
 | cluster_manager_timeout | Time | Amount of time to wait for a connection to the cluster manager. Optional, defaults to `30s`. |
 
-#### Example request
+## Example request
 
 The following retrieves the `my-first-script` stored script.
 
-````json
-GET _scripts/my-first-script
-````
-{% include copy-curl.html %}
+<!-- spec_insert_start
+component: example_code
+rest: GET /_scripts/my-first-script
+-->
+{% capture step1_rest %}
+GET /_scripts/my-first-script
+{% endcapture %}
 
-#### Example response
+{% capture step1_python %}
+
+
+response = client.get_script(
+  id = "my-first-script"
+)
+
+{% endcapture %}
+
+{% include code-block.html
+    rest=step1_rest
+    python=step1_python %}
+<!-- spec_insert_end -->
+
+## Example response
 
 The `GET _scripts/my-first-script` request returns the following fields:
 
@@ -53,7 +76,7 @@ The `GET _scripts/my-first-script` request returns the following fields:
 }
 ````
 
-## Response fields
+## Response body fields
 
 The `GET _scripts/my-first-script` request returns the following response fields:
 

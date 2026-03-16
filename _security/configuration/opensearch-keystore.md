@@ -44,6 +44,7 @@ You can append each command with the following options:
 - `-h, --help`: Displays help information about the script and its options.
 - `-s, --silent`: Provides minimal output when the script responds to a command.
 - `-v, --verbose`: Provides a verbose output for debugging purposes.
+- `-p, --password` (`create` command only): Specifies the password to use for encrypting the keystore. If this flag isn't used, the keystore will be created without a password.
 
 ## Examples
 
@@ -65,6 +66,17 @@ The script responds with a confirmation that the keystore was created:
 ```bash
 Created opensearch keystore in $OPENSEARCH_HOME/config/opensearch.keystore
 ```
+
+### Create a new password-protected keystore
+
+To create a new password-protected keystore, run the following command:
+
+```bash
+./bin/opensearch-keystore create -p
+```
+{% include copy.html %}
+
+If a keystore already exists, the script will ask whether you would like to overwrite the existing keystore.
 
 ### Setting a keystore password
 
@@ -129,6 +141,15 @@ No response exists for this command. To confirm that the setting was deleted, us
 For a complete list of secure settings that can be configured using `opensearch-keystore`, refer to [(Advanced) Using encrypted password settings for SSL]({{site.url}}{{site.baseurl}}/security/configuration/tls/#advanced-using-encrypted-password-settings-for-ssl).
 {: .note}
 
+### Upgrading the keystore
+
+The following command upgrades the keystore format to the latest version:
+
+```bash
+./bin/opensearch-keystore upgrade
+```
+{% include copy.html %}
+
 ## Keystore entries as OpenSearch settings
 
-After a setting has been added to a keystore, it is implicitly added to the OpenSearch configuration as if it were another entry in `opensearch.yml`. To modify a keystore entry use `./bin/opensearch-keystore upgrade <setting>`. To remove an entry, use `./bin/opensearch-keystore remove <setting>`.
+After a setting has been added to a keystore, it is implicitly added to the OpenSearch configuration as if it were another entry in `opensearch.yml`.

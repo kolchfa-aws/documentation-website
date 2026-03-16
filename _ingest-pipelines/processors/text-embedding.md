@@ -15,6 +15,9 @@ The `text_embedding` processor is used to generate vector embeddings from text f
 Before using the `text_embedding` processor, you must set up a machine learning (ML) model. For more information, see [Choosing a model]({{site.url}}{{site.baseurl}}/ml-commons-plugin/integrating-ml-models/#choosing-a-model).
 {: .note}
 
+**Token limits and truncation**: Text embedding models have maximum token limits (typically 512 tokens for BERT-based models). When a document exceeds this limit, the model automatically truncates the text, and the truncated content is not represented in the embeddings. This can significantly impact search relevance because documents may not be returned in search results if the relevant content was truncated. To avoid this issue, split long documents into smaller chunks before generating embeddings. 
+{: .warning}
+
 The following is the syntax for the `text_embedding` processor: 
 
 ```json
@@ -27,7 +30,7 @@ The following is the syntax for the `text_embedding` processor:
   }
 }
 ```
-{% include copy-curl.html %}
+{% include copy.html %}
 
 ## Configuration parameters
 
@@ -41,6 +44,11 @@ The following table lists the required and optional parameters for the `text_emb
 `field_map.<vector_field>`  | String | Required | The name of the vector field in which to store the generated text embeddings.
 `description`  | String | Optional  | A brief description of the processor.  |
 `tag` | String | Optional | An identifier tag for the processor. Useful for debugging to distinguish between processors of the same type. |
+`batch_size` | Integer | Optional | Specifies the number of documents to be batched and processed each time. Default is `1`. |
+`if` | String containing a Boolean expression | Optional | A condition for running the processor.|
+`ignore_failure` | Boolean | Optional | Specifies whether the processor continues execution even if it encounters an error. If set to `true`, the processor failure is ignored. Default is `false`.|
+`on_failure` | List | Optional | A list of processors to run if the processor fails. |
+`skip_existing` | Boolean | Optional | When `true`, the processor does not make inference calls for fields that already contain embeddings, leaving existing embeddings unchanged. Default is `false`.|
 
 ## Using the processor
 
@@ -128,4 +136,4 @@ Once you have created an ingest pipeline, you need to create an index for ingest
 - To learn how to use the `neural` query for text search, see [Neural query]({{site.url}}{{site.baseurl}}/query-dsl/specialized/neural/).
 - To learn more about semantic search, see [Semantic search]({{site.url}}{{site.baseurl}}/search-plugins/semantic-search/).
 - To learn more about using models in OpenSearch, see [Choosing a model]({{site.url}}{{site.baseurl}}/ml-commons-plugin/integrating-ml-models/#choosing-a-model).
-- For a comprehensive example, see [Neural search tutorial]({{site.url}}{{site.baseurl}}/search-plugins/neural-search-tutorial/).
+- For a comprehensive example, see [Getting started with semantic and hybrid search]({{site.url}}{{site.baseurl}}/search-plugins/neural-search-tutorial/).
