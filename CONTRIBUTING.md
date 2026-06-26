@@ -142,3 +142,4 @@ Optionally, you can install the [Vale VSCode](https://github.com/chrischinchilla
 ## Getting help
 
 For help with the contribution process, reach out to one of the [points of contact](README.md#points-of-contact).
+
