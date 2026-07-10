@@ -60,7 +60,7 @@ OpenSearch supports the following static cluster-level index settings:
 
 - `indices.query.query_string.analyze_wildcard` (Static, Boolean): Controls whether wildcard terms in query string queries are analyzed using the configured analyzer. When enabled, wildcard queries undergo analysis (tokenization, filtering) which can improve matching but may affect performance. When disabled, wildcard terms are used as-is without analysis. Default is `false`.
 
-- `indices.time_series_index.default_index_merge_policy` (Static, string): Sets the default merge policy for time series indices across the cluster. This setting controls how Lucene segments are merged for time series data, which can significantly impact indexing performance and storage efficiency. Valid values include `default`, `tiered`, and `log_byte_size`. Default is `default`.
+- `indices.time_series_index.default_index_merge_policy` (Static, string): Sets the default merge policy for time series indices across the cluster. This setting controls how Lucene segments are merged for time-series data, which can significantly impact indexing performance and storage efficiency. Valid values include `default`, `tiered`, and `log_byte_size`. Default is `default`.
 
 ### Dynamic cluster-level index settings
 
@@ -99,7 +99,7 @@ OpenSearch supports the following dynamic cluster-level index settings:
 
 - `cluster.remote_store.index.path.hash_algorithm` (String): The hash function used to derive the hash value when `cluster.remote_store.index.path.type` is set to `hashed_prefix` or `hashed_infix`. This setting is effective only for remote-store-enabled clusters. This setting supports the following values:
   - `fnv_1a_base64`: Uses the FNV1a hash function and generates a url-safe 20-bit Base64-encoded hash value.
-  - `fnv_1a_composite_1`: Uses the FNV1a hash function and generates a custom encoded hash value that scales well with most remote store options. The FNV1a function generates 64-bit value. The custom encoding uses the most significant 6 bits to create a url-safe base64 character and the next 14 bits to create a binary string. Default is `fnv_1a_composite_1`.
+  - `fnv_1a_composite_1`: Uses the FNV1a hash function and generates a custom encoded hash value that scales well with most remote store options. The FNV1a function generates 64-bit value. The custom encoding uses the most significant 6 bits to create a URL-safe Base64 character and the next 14 bits to create a binary string. Default is `fnv_1a_composite_1`.
 
 - `cluster.remote_store.translog.transfer_timeout` (Time unit): Controls the timeout value while uploading translog and checkpoint files during a sync to the remote store. This setting is applicable only for remote-store-enabled clusters. Default is `30s`.
 
@@ -390,7 +390,7 @@ OpenSearch supports the following dynamic index-level index settings:
 
 - `index.soft_deletes.retention.operations` (Long): The maximum number of soft-deleted operations to retain in the index. Soft deletes allow for efficient replication and point-in-time recovery by marking documents as deleted rather than immediately removed. This setting controls how many soft-deleted operations are preserved before they are eligible for cleanup. Default is `0` (unlimited retention).
 
-- `index.remote_store.enabled` (Boolean): Enables remote store functionality for the index. When enabled, the index's segments and translog data are stored in a remote repository in addition to local storage. This provides data durability and enables features like point-in-time recovery from remote snapshots. This setting must be configured during index creation and cannot be changed afterward. Default is `false`.
+- `index.remote_store.enabled` (Boolean): Enables remote store functionality for the index. When enabled, the index's segments and translog data is stored in a remote repository in addition to local storage. This provides data durability and enables features like point-in-time recovery from remote snapshots. This setting must be configured during index creation and cannot be changed afterward. Default is `false`.
 
 - `index.remote_store.segment.repository` (String): Specifies the repository name for storing index segments when remote store is enabled. The repository must be configured at the cluster level before being used for remote segment storage. This setting is required when `index.remote_store.enabled` is `true` and determines where segment files are stored remotely.
 

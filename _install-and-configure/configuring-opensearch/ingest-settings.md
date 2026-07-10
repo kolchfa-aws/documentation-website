@@ -25,7 +25,7 @@ Common processor settings control which standard ingest processors are allowed i
 
 OpenSearch supports the following static common processor settings:
 
-- `ingest.common.processors.allowed` (Static, list): Specifies which common ingest processors are allowed to be used in ingest pipelines. When this list is empty (default), no restriction is applied and all available common processors (such as `set`, `remove`, `rename`, `convert`, etc.) can be used. When configured with specific processor names, only those processors will be permitted in pipelines. This setting provides fine-grained control over data transformation capabilities for security and compliance requirements. Default is `[]` (empty list - no restrictions).
+- `ingest.common.processors.allowed` (Static, list): Specifies which common ingest processors are allowed to be used in ingest pipelines. When this list is empty (default), no restriction is applied and all available common processors (such as `set`, `remove`, `rename`, `convert`) can be used. When configured with specific processor names, only those processors will be permitted in pipelines. This setting provides fine-grained control over data transformation capabilities for security and compliance requirements. Default is `[]` (empty list - no restrictions).
 
 ## Caching and performance settings
 

@@ -456,7 +456,7 @@ volumes:
 ```
 {% include copy.html %}
 
-Remember that the certificates you specify in your compose file must be the same as the certificates defined in your custom `opensearch.yml` file. You should replace the root, admin, and node certificates with your own. For more information see [Configure TLS certificates]({{site.url}}{{site.baseurl}}/security/configuration/tls).
+Remember that the certificates you specify in your compose file must be the same as the certificates defined in your custom `opensearch.yml` file. You should replace the root, admin, and node certificates with your own. For more information see [Configure TLS certificates]({{site.url}}{{site.baseurl}}/security/configuration/tls/).
 ```yml
 plugins.security.ssl.transport.pemcert_filepath: node1.pem
 plugins.security.ssl.transport.pemkey_filepath: node1-key.pem

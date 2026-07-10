@@ -207,7 +207,7 @@ OpenSearch supports the following cluster-level shard, block, and task settings:
 
 - `cluster.persistent_tasks.allocation.recheck_interval` (Time unit): The cluster manager automatically checks whether persistent tasks need to be assigned when the cluster state changes in a significant way. There are other factors, such as memory usage, that will affect whether persistent tasks are assigned to nodes but do not otherwise cause the cluster state to change. This setting defines how often assignment checks are performed in response to these factors. Default is `30 seconds`, with a minimum of `10 seconds` being required.
 
-- `task_cancellation.duration_millis` (Dynamic, long): The duration threshold in milliseconds for tracking cancelled tasks in the task cancellation monitoring system. Default is `10000` (10 seconds).
+- `task_cancellation.duration_millis` (Dynamic, long): The duration threshold in milliseconds for tracking canceled tasks in the task cancellation monitoring system. Default is `10000` (10 seconds).
 
 - `task_cancellation.enabled` (Dynamic, Boolean): Enables or disables the task cancellation monitoring service. Default is `true`.
 
@@ -382,9 +382,9 @@ For practical examples and step-by-step configuration guides, see [Remote-backed
 
 - `cluster.filecache.remote_data_ratio` (Dynamic, double): Controls the ratio of remote data to local disk cache for file caching in remote store configurations. This setting determines how much remote data is cached locally to improve performance. Higher values cache more data locally but consume more disk space. Value should be between 0.0 and 1.0. Default is `0.8`.
 
-- `cluster.indices.replication.strategy` (Dynamic, string): Sets the replication strategy for indices in the cluster. Valid values include:
+- `cluster.indices.replication.strategy` (Dynamic, string): Sets the replication strategy for indexes in the cluster. Valid values include:
   - `DOCUMENT`: Traditional document-based replication
   - `SEGMENT`: Segment-based replication for improved performance and efficiency
   Default is `DOCUMENT`.
 
-- `cluster.index.restrict.replication.type` (Dynamic, Boolean): When enabled, restricts the creation of indices with specific replication types to ensure consistency across the cluster. This setting helps enforce replication policies and prevents incompatible replication configurations. Default is `false`.
+- `cluster.index.restrict.replication.type` (Dynamic, Boolean): When enabled, restricts the creation of indexes with specific replication types to ensure consistency across the cluster. This setting helps enforce replication policies and prevents incompatible replication configurations. Default is `false`.

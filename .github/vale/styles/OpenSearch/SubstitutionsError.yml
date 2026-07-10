@@ -10,6 +10,7 @@ swap:
   'autoscaling': auto scaling
   'command-line interface': command line interface
   'coordinator node': coordinating node
+  'cross cluster replication': cross-cluster replication
   'coordinator nodes': coordinating nodes
   'data are': data is
   'data set': dataset
