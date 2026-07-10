@@ -93,7 +93,7 @@ extraEnvs:
 
 You can also build the `opensearch-<VERSION>.tgz` file manually:
 
-1. Clone the [helm-charts repo](https://github.com/opensearch-project/helm-charts/tree/main):
+1. Clone the [`helm-charts` repo](https://github.com/opensearch-project/helm-charts/tree/main):
 
    ```bash
    git clone https://github.com/opensearch-project/helm-charts.git
