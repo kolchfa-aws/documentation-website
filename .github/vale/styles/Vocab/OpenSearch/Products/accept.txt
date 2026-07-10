@@ -121,6 +121,7 @@ Search Relevance Workbench
 Simple Schema for Observability
 Solr
 SolrCloud
+SQLi
 Strands Agents
 Strimzi
 Tableau

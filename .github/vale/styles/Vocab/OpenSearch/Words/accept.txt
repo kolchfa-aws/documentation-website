@@ -17,6 +17,7 @@ Boolean
 [Cc]omposable
 [Cc]onfig
 [Cc]ron
+[Cc]yberattacks?
 [Cc]ybersecurity
 [Dd]ashboarding
 [Dd]atagram
@@ -55,6 +56,7 @@ gRPC
 [Hh]yperparameters
 [Ii]mpactful
 [Ii]ngress
+[Ii]ntel
 [Ii]nitializer
 [Ii]nline
 [Ii]nstrumentations?
@@ -130,6 +132,7 @@ pprof
 [Ss]andbox(es|ed|ing)?
 [Ss]harding
 [Ss]erverless
+[Ss]everities
 [Ss]harding
 [Ss]ignificand
 [Ss]napshott(ed|ing)
