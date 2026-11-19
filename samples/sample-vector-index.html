@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creating and searching vector indexes - Amazon OpenSearch Service</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Amazon Ember", "Helvetica Neue", Arial, sans-serif; font-size: 14px; color: #16191f; background: #fff; }
+
+  /* Layout */
+  .layout { display: flex; min-height: 100vh; }
+  .sidebar { width: 260px; min-width: 260px; background: #fff; border-right: 1px solid #d5dbdb; padding: 20px 0; overflow-y: auto; position: sticky; top: 0; height: 100vh; }
+  .sidebar-header { padding: 0 16px 12px; font-weight: 700; font-size: 13px; color: #0972d3; border-bottom: 1px solid #d5dbdb; margin-bottom: 8px; }
+  .sidebar nav a { display: block; padding: 5px 16px; font-size: 13px; color: #16191f; text-decoration: none; line-height: 1.4; }
+  .sidebar nav a:hover { background: #f2f8fd; color: #0972d3; }
+  .sidebar nav a.active { background: #f2f8fd; color: #0972d3; border-left: 3px solid #0972d3; padding-left: 13px; font-weight: 600; }
+  .sidebar nav .nav-section { padding: 10px 16px 4px; font-size: 11px; font-weight: 700; color: #687078; text-transform: uppercase; letter-spacing: 0.05em; }
+  .sidebar nav .sub { padding-left: 28px; }
+  .main { flex: 1; max-width: 900px; padding: 24px 48px 60px; }
+
+  /* Breadcrumb */
+  .breadcrumb { font-size: 12px; color: #687078; margin-bottom: 16px; }
+  .breadcrumb a { color: #0972d3; text-decoration: none; }
+  .breadcrumb a:hover { text-decoration: underline; }
+  .breadcrumb span { margin: 0 6px; }
+
+  /* Page header */
+  h1 { font-size: 28px; font-weight: 700; color: #16191f; margin-bottom: 8px; line-height: 1.3; }
+  .pdf-link { font-size: 12px; color: #687078; margin-bottom: 20px; display: block; }
+
+  /* Applies-to note */
+  .note { background: #f2f8fd; border-left: 4px solid #0972d3; padding: 12px 16px; margin: 16px 0; border-radius: 0 4px 4px 0; }
+  .note .note-title { font-weight: 700; font-size: 13px; color: #0972d3; margin-bottom: 4px; }
+  .note p { font-size: 13px; color: #16191f; line-height: 1.5; }
+  .note a { color: #0972d3; }
+
+  /* Body text */
+  p { margin: 12px 0; line-height: 1.6; }
+  a { color: #0972d3; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code { font-family: "Courier New", monospace; background: #f4f4f4; padding: 1px 5px; border-radius: 3px; font-size: 13px; color: #16191f; }
+
+  /* Headings */
+  h2 { font-size: 22px; font-weight: 700; color: #16191f; margin: 28px 0 12px; padding-bottom: 6px; border-bottom: 1px solid #e9ebed; }
+  h3 { font-size: 17px; font-weight: 700; color: #16191f; margin: 20px 0 10px; }
+  h4 { font-size: 15px; font-weight: 700; color: #16191f; margin: 16px 0 8px; }
+
+  /* Tabs */
+  .tab-group { margin: 16px 0; border: 1px solid #d5dbdb; border-radius: 4px; overflow: hidden; }
+  .tab-bar { display: flex; background: #f4f4f4; border-bottom: 1px solid #d5dbdb; }
+  .tab-btn { padding: 9px 18px; font-size: 13px; font-weight: 500; color: #687078; background: none; border: none; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -1px; white-space: nowrap; }
+  .tab-btn:hover { color: #0972d3; background: #e8f4fc; }
+  .tab-btn.active { color: #0972d3; border-bottom-color: #0972d3; background: #fff; font-weight: 600; }
+  .tab-panel { display: none; padding: 16px 20px; }
+  .tab-panel.active { display: block; }
+
+  /* Code blocks */
+  .code-block { margin: 12px 0; border: 1px solid #d5dbdb; border-radius: 4px; overflow: hidden; }
+  .code-header { display: flex; justify-content: space-between; align-items: center; background: #f4f4f4; padding: 6px 12px; border-bottom: 1px solid #d5dbdb; }
+  .code-lang { font-size: 11px; font-weight: 700; color: #687078; text-transform: uppercase; }
+  .copy-btn { font-size: 12px; color: #0972d3; background: none; border: 1px solid #0972d3; border-radius: 3px; padding: 3px 10px; cursor: pointer; }
+  .copy-btn:hover { background: #f2f8fd; }
+  .copy-btn.copied { color: #1d8102; border-color: #1d8102; }
+  pre { margin: 0; padding: 14px 16px; background: #fff; overflow-x: auto; font-family: "Courier New", monospace; font-size: 13px; line-height: 1.5; }
+  pre code { background: none; padding: 0; font-size: 13px; }
+
+  /* Collapsible */
+  .collapsible { margin: 12px 0; border: 1px solid #d5dbdb; border-radius: 4px; }
+  .collapsible-btn { width: 100%; text-align: left; padding: 10px 14px; background: #f4f4f4; border: none; cursor: pointer; font-size: 13px; font-weight: 600; color: #16191f; display: flex; align-items: center; gap: 8px; }
+  .collapsible-btn:hover { background: #e9ebed; }
+  .collapsible-btn .arrow { font-size: 10px; transition: transform 0.2s; display: inline-block; }
+  .collapsible-btn.open .arrow { transform: rotate(90deg); }
+  .collapsible-content { display: none; padding: 14px 16px; }
+  .collapsible-content.open { display: block; }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; margin: 14px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: #f4f4f4; text-align: left; padding: 9px 12px; border: 1px solid #d5dbdb; font-weight: 700; color: #16191f; }
+  td { padding: 9px 12px; border: 1px solid #d5dbdb; vertical-align: top; line-height: 1.5; }
+  tr:nth-child(even) td { background: #fafafa; }
+
+  /* Lists */
+  ul, ol { margin: 10px 0 10px 22px; }
+  li { margin: 5px 0; line-height: 1.6; }
+  li ul, li ol { margin: 4px 0 4px 18px; }
+
+  /* Unknown/confirm badge */
+  .unknown { display: inline-block; background: #fff8e7; border: 1px solid #f0a500; color: #594300; font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 10px; white-space: nowrap; }
+
+  /* Related pages section */
+  .related { margin-top: 32px; padding-top: 20px; border-top: 1px solid #e9ebed; }
+  .related h2 { border-bottom: none; margin-top: 0; }
+
+  /* Sample banner */
+  .sample-banner { background: #fff8e7; border: 1px solid #f0a500; border-radius: 4px; padding: 10px 16px; margin-bottom: 20px; font-size: 13px; color: #594300; }
+  .sample-banner strong { color: #3d2d00; }
+
+  /* Top nav bar */
+  .topbar { background: #232f3e; padding: 0 24px; display: flex; align-items: center; height: 44px; gap: 20px; position: sticky; top: 0; z-index: 100; }
+  .topbar .logo { color: #ff9900; font-weight: 700; font-size: 16px; white-space: nowrap; }
+  .topbar .service { color: #fff; font-size: 13px; white-space: nowrap; }
+  .topbar .search { flex: 1; max-width: 400px; background: #fff; border-radius: 3px; padding: 5px 10px; font-size: 13px; border: none; color: #16191f; }
+
+  /* Feedback bar */
+  .feedback { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e9ebed; display: flex; align-items: center; gap: 12px; font-size: 13px; color: #687078; }
+  .feedback-btn { padding: 5px 14px; border: 1px solid #d5dbdb; border-radius: 3px; background: #fff; cursor: pointer; font-size: 13px; }
+  .feedback-btn:hover { background: #f4f4f4; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="logo">aws</span>
+  <span class="service">Amazon OpenSearch Service</span>
+  <input class="search" type="text" placeholder="Search documentation">
+</div>
+
+<div class="layout">
+  <div class="sidebar">
+    <div class="sidebar-header">Amazon OpenSearch Service</div>
+    <nav>
+      <a href="#">What is Amazon OpenSearch Service?</a>
+      <div class="sub"><a href="#">Choosing between domains and Serverless</a></div>
+      <div class="sub"><a href="#">Feature availability</a></div>
+      <a href="#">Getting started</a>
+      <a href="#">Configuring domains</a>
+      <a href="#">Configuring Serverless collections</a>
+      <a href="#">Migrating from a domain to Serverless</a>
+      <a href="#">Security</a>
+      <a href="#">Indexing data</a>
+      <a href="#">Managing indexes</a>
+      <a href="#">Searching data</a>
+      <div class="nav-section">Vector search</div>
+      <a class="active" href="#">Vector indexes</a>
+      <div class="sub"><a href="#">S3 Vectors</a></div>
+      <div class="sub"><a href="#">Vector ingestion</a></div>
+      <div class="sub"><a href="#">Auto-optimize</a></div>
+      <div class="sub"><a href="#">GPU acceleration</a></div>
+      <a href="#">AI search</a>
+      <a href="#">Machine learning</a>
+      <a href="#">Observability</a>
+      <a href="#">Reference</a>
+    </nav>
+  </div>
+
+  <div class="main">
+    <div class="breadcrumb">
+      <a href="#">Amazon OpenSearch Service</a>
+      <span>›</span>
+      <a href="#">Developer Guide</a>
+      <span>›</span>
+      <a href="#">Vector search</a>
+      <span>›</span>
+      Vector indexes
+    </div>
+
+    <div class="sample-banner">
+      <strong>This is a sample page.</strong> <span class="unknown">Confirm</span> cells are open questions that need to be filled in before this page is published.
+    </div>
+
+    <h1>Creating and searching vector indexes</h1>
+
+    <div class="note">
+      <div class="note-title">Applies to</div>
+      <p>OpenSearch Service domains &middot; OpenSearch Serverless NextGen vector search collections &middot; OpenSearch Serverless Classic vector search collections<br>
+      For availability of each option on this page, see <a href="#">Feature availability</a>.</p>
+    </div>
+
+    <p>A vector index stores numeric vectors, such as embeddings generated by a machine learning model, alongside regular fields. You can search it for the documents whose vectors are closest to a query vector. Use vector search for product recommendations, image and document similarity, and semantic search.</p>
+
+    <p>For background on how approximate nearest neighbor search works, see <a href="https://docs.opensearch.org/latest/vector-search/getting-started/concepts/">Vector search concepts</a> on the OpenSearch documentation website.</p>
+
+    <p>To generate embeddings from text automatically at ingest and search time, see <a href="#">AI search</a>. This page covers indexes into which you load vectors yourself.</p>
+
+    <h2>Prerequisites</h2>
+
+    <div class="tab-group" id="prereq-tabs">
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('prereq', 'domain', this)">Domain</button>
+        <button class="tab-btn" onclick="switchTab('prereq', 'serverless', this)">Serverless</button>
+      </div>
+      <div class="tab-panel active" id="prereq-domain">
+        <ul>
+          <li>An OpenSearch Service domain. For instructions, see <a href="#">Creating and modifying domains</a>.</li>
+          <li>Permission to send requests to the domain:
+            <ul>
+              <li>The domain access policy or an IAM policy must allow the <code>es:ESHttpPut</code>, <code>es:ESHttpPost</code>, and <code>es:ESHttpGet</code> actions on the domain.</li>
+              <li>If the domain uses fine-grained access control, your user or role must also be mapped to a role that has index permissions on the vector index. For more information, see <a href="#">Fine-grained access control</a>.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="tab-panel" id="prereq-serverless">
+        <ul>
+          <li>A vector search collection. For new collections, use NextGen. For instructions, see <a href="#">Creating and managing collections</a>.</li>
+          <li>An IAM policy that allows <code>aoss:APIAccessAll</code> on the collection.</li>
+          <li>A data access policy that grants you the following permissions on the index:</li>
+        </ul>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">JSON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code>[
+  {
+    "Rules": [
+      {
+        "ResourceType": "index",
+        "Resource": ["index/<em>&lt;collection-name&gt;</em>/*"],
+        "Permission": [
+          "aoss:CreateIndex",
+          "aoss:DescribeIndex",
+          "aoss:ReadDocument",
+          "aoss:WriteDocument"
+        ]
+      }
+    ],
+    "Principal": ["arn:aws:iam::<em>&lt;account-id&gt;</em>:role/<em>&lt;role-name&gt;</em>"]
+  }
+]</code></pre>
+        </div>
+        <p>For more information, see <a href="#">Data access policies</a>.</p>
+      </div>
+    </div>
+
+    <h3>Sending requests</h3>
+    <p>You can send the requests on this page from Dev Tools in OpenSearch Dashboards or OpenSearch UI, or from any HTTP client that signs requests using AWS Signature Version 4. When you sign requests, use the service name <code>es</code> for a domain and <code>aoss</code> for a collection. For more information, see <a href="#">IAM and request signing</a>.</p>
+
+    <h2>Step 1: Create a vector index</h2>
+
+    <p>The following request creates an index named <code>products</code> with a 3-dimensional vector field and two metadata fields. The same request works on domains and on both Serverless generations:</p>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">JSON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+      <pre><code>PUT /products
+{
+  "settings": {
+    "index.knn": true
+  },
+  "mappings": {
+    "properties": {
+      "product_vector": {
+        "type": "knn_vector",
+        "dimension": 3,
+        "space_type": "l2"
+      },
+      "name": {
+        "type": "text"
+      },
+      "price": {
+        "type": "float"
+      }
+    }
+  }
+}</code></pre>
+    </div>
+
+    <p>The <code>dimension</code> must match the number of values in the vectors that you index. For the maximum number of dimensions on each deployment, see <a href="#">Quotas and Regions</a>. The <code>space_type</code> is the distance function: <code>l2</code> (Euclidean distance), <code>cosinesimil</code> (cosine similarity), or <code>innerproduct</code> (dot product).</p>
+
+    <h3>Choosing the engine, algorithm, and compression</h3>
+
+    <p>How much of the index configuration you can choose depends on the deployment:</p>
+
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Setting</th><th>Domains</th><th>Serverless NextGen</th><th>Serverless Classic</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>method.engine</code> and <code>method.name</code></td>
+          <td>You can set them. Which engines are supported depends on the engine version. See <a href="#">OpenSearch compatibility</a>.</td>
+          <td>Not supported. OpenSearch Serverless chooses the configuration.</td>
+          <td>You can set them. The default engine is <code>nmslib</code>.</td>
+        </tr>
+        <tr>
+          <td><code>compression_level</code></td>
+          <td><span class="unknown">Confirm</span></td>
+          <td><code>32x</code> by default. You can set <code>1x</code>, <code>2x</code>, <code>8x</code>, <code>16x</code>, or <code>32x</code>.</td>
+          <td><span class="unknown">Confirm</span></td>
+        </tr>
+        <tr>
+          <td>GPU acceleration for index builds</td>
+          <td>Off by default. See <a href="#">GPU acceleration</a>.</td>
+          <td>On by default. Use <code>index.knn.remote_index_build.enabled</code> to turn it off for an index.</td>
+          <td><span class="unknown">Confirm</span></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="collapsible">
+      <button class="collapsible-btn" onclick="toggleCollapsible(this)">
+        <span class="arrow">&#9658;</span> Example: setting the compression level on a NextGen collection
+      </button>
+      <div class="collapsible-content">
+        <p>The following request creates an index that uses 1x compression (no compression):</p>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">JSON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code>PUT /products-uncompressed
+{
+  "settings": {
+    "index.knn": true
+  },
+  "mappings": {
+    "properties": {
+      "product_vector": {
+        "type": "knn_vector",
+        "dimension": 3,
+        "space_type": "l2",
+        "compression_level": "1x"
+      }
+    }
+  }
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <h2>Step 2: Index documents</h2>
+
+    <p>The following request indexes three products:</p>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">JSON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+      <pre><code>POST /_bulk
+{ "index": { "_index": "products" } }
+{ "product_vector": [0.12, 0.85, 0.33], "name": "Trail running shoes", "price": 129.99 }
+{ "index": { "_index": "products" } }
+{ "product_vector": [0.10, 0.80, 0.40], "name": "Lightweight hiking boots", "price": 159.00 }
+{ "index": { "_index": "products" } }
+{ "product_vector": [0.90, 0.15, 0.05], "name": "Insulated water bottle", "price": 24.50 }</code></pre>
+    </div>
+
+    <p>The following options depend on the deployment:</p>
+
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th></th><th>Domains</th><th>Serverless NextGen</th><th>Serverless Classic</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Custom document IDs (<code>PUT /products/_doc/&lt;id&gt;</code>)</td>
+          <td>Supported</td>
+          <td>Supported</td>
+          <td>Not supported. Omit the document ID, and OpenSearch Serverless generates one.</td>
+        </tr>
+        <tr>
+          <td>Time until new documents are searchable</td>
+          <td>Controlled by the index's <code>refresh_interval</code> setting</td>
+          <td>About 5 seconds</td>
+          <td>About 60 seconds</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h2>Step 3: Search the index</h2>
+
+    <p>The following request returns the two products whose vectors are closest to the query vector:</p>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">JSON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+      <pre><code>GET /products/_search
+{
+  "size": 2,
+  "query": {
+    "knn": {
+      "product_vector": {
+        "vector": [0.11, 0.82, 0.36],
+        "k": 2
+      }
+    }
+  }
+}</code></pre>
+    </div>
+
+    <p>Set <code>size</code> as well as <code>k</code>. Without <code>size</code>, a domain can return <code>k</code> results for each shard instead of <code>k</code> results in total.</p>
+
+    <p><strong>Vectors in the response:</strong> On domains and Classic collections, each hit's <code>_source</code> includes the vector field. On NextGen collections, <code>_source</code> excludes vectors by default, which reduces response size and latency. To include the vector field on NextGen, add <code>"_source": true</code> to the request, or list the field in <code>_source.includes</code>.</p>
+
+    <div class="collapsible">
+      <button class="collapsible-btn" onclick="toggleCollapsible(this)">
+        <span class="arrow">&#9658;</span> Example response (NextGen)
+      </button>
+      <div class="collapsible-content">
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">JSON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><code>{
+  "took": 8,
+  "timed_out": false,
+  "hits": {
+    "total": { "value": 2, "relation": "eq" },
+    "max_score": 0.99,
+    "hits": [
+      {
+        "_index": "products",
+        "_id": "1",
+        "_score": 0.99,
+        "_source": {
+          "name": "Trail running shoes",
+          "price": 129.99
+        }
+      },
+      {
+        "_index": "products",
+        "_id": "2",
+        "_score": 0.98,
+        "_source": {
+          "name": "Lightweight hiking boots",
+          "price": 159.00
+        }
+      }
+    ]
+  }
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <h3>Filtering results</h3>
+
+    <p>To return only documents that match a condition, add a <code>filter</code> inside the <code>knn</code> query. The following request returns the closest products that cost less than 150:</p>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">JSON</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+      <pre><code>GET /products/_search
+{
+  "size": 2,
+  "query": {
+    "knn": {
+      "product_vector": {
+        "vector": [0.11, 0.82, 0.36],
+        "k": 2,
+        "filter": {
+          "range": {
+            "price": { "lt": 150 }
+          }
+        }
+      }
+    }
+  }
+}</code></pre>
+    </div>
+
+    <div class="tab-group">
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('filter', 'domain', this)">Domain</button>
+        <button class="tab-btn" onclick="switchTab('filter', 'nextgen', this)">Serverless NextGen</button>
+        <button class="tab-btn" onclick="switchTab('filter', 'classic', this)">Serverless Classic</button>
+      </div>
+      <div class="tab-panel active" id="filter-domain">
+        <p>Filtering inside the <code>knn</code> query requires an engine that supports it. See <a href="#">OpenSearch compatibility</a>.</p>
+      </div>
+      <div class="tab-panel" id="filter-nextgen">
+        <p>Supported. No engine setting is needed.</p>
+      </div>
+      <div class="tab-panel" id="filter-classic">
+        <p>Set <code>"method": { "engine": "faiss", "name": "hnsw" }</code> in the field mapping.</p>
+      </div>
+    </div>
+
+    <h2>Limitations</h2>
+
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Limitation</th><th>Domains</th><th>Serverless NextGen</th><th>Serverless Classic</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>k-NN cluster settings</td>
+          <td>You can change all of them except <code>knn.memory.circuit_breaker.enabled</code> and <code>knn.circuit_breaker.triggered</code></td>
+          <td>Not applicable</td>
+          <td>Not applicable</td>
+        </tr>
+        <tr>
+          <td>Warmup, stats, and model training APIs</td>
+          <td><span class="unknown">Confirm</span></td>
+          <td><span class="unknown">Confirm</span></td>
+          <td>Not supported</td>
+        </tr>
+        <tr>
+          <td>Inline and stored scripts</td>
+          <td>Supported</td>
+          <td><span class="unknown">Confirm</span></td>
+          <td>Not supported</td>
+        </tr>
+        <tr>
+          <td>Radial search</td>
+          <td><span class="unknown">Confirm</span></td>
+          <td>Not supported on indexes that use 32x compression</td>
+          <td><span class="unknown">Confirm</span></td>
+        </tr>
+        <tr>
+          <td>UltraWarm and cold storage</td>
+          <td>Supported for k-NN indexes created on 2.x or later, on domains running 2.17 or later</td>
+          <td>Not applicable</td>
+          <td>Not applicable</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <p>On domains, vector graphs use memory outside the Java heap. By default, k-NN uses up to half of the memory that isn't allocated to the heap, which is a quarter of the instance's RAM. Monitor the <code>KNNGraphMemoryUsage</code> CloudWatch metric to watch graph memory. For more information, see <a href="#">CloudWatch metrics</a>.</p>
+
+    <div class="related">
+      <h2>Related pages</h2>
+      <ul>
+        <li><a href="#">AI search</a>: generate embeddings automatically from text</li>
+        <li><a href="#">GPU acceleration</a>, <a href="#">Auto-optimize</a>, and <a href="#">Vector ingestion</a></li>
+        <li><a href="#">Feature availability</a> and <a href="#">OpenSearch compatibility</a></li>
+      </ul>
+    </div>
+
+    <div class="feedback">
+      <span>Did this page help you?</span>
+      <button class="feedback-btn">Yes</button>
+      <button class="feedback-btn">No</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(group, tabId, btn) {
+  const tabGroup = btn.closest('.tab-group');
+  tabGroup.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  tabGroup.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  const panel = document.getElementById(group + '-' + tabId);
+  if (panel) panel.classList.add('active');
+}
+
+function toggleCollapsible(btn) {
+  btn.classList.toggle('open');
+  const content = btn.nextElementSibling;
+  content.classList.toggle('open');
+}
+
+function copyCode(btn) {
+  const pre = btn.closest('.code-block').querySelector('pre');
+  const text = pre.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>
